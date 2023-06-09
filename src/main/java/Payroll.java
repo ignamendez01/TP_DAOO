@@ -12,7 +12,7 @@ public class Payroll {
     public float calculate(Date date) {
         float total = 0.0F;
         for (Employee employee: employees) {
-            total = total + employee.contract.calculate(date);
+            total = total + employee.getContract().calculate(date);
         }
         return total;
     }

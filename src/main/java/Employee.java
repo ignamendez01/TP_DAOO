@@ -2,18 +2,32 @@ public class Employee {
     private long ID;
     String name;
     String contact;
-    Contract contract;
+    Versionable<Contract> contracts;
     private static long ids = 0;
 
     public Employee(Contract contract) {
-        this.contract = contract;
+        this.contracts = new Versionable<>(contract);
     }
 
     public Employee(String name, String contact, Contract contract) {
-        this.ID = Employee.ids++;
+        this.ID = ++Employee.ids;
         this.name = name;
         this.contact = contact;
-        this.contract = contract;
+        this.contracts = new Versionable<>(contract);
+    }
+
+    public Employee(long id, String name, String contact, Contract contract) {
+        this.ID = id;
+        this.name = name;
+        this.contact = contact;
+        this.contracts = new Versionable<>(contract);
+    }
+
+    public Employee(long id, String name, String contact, Versionable<Contract> contracts) {
+        this.ID = id;
+        this.name = name;
+        this.contact = contact;
+        this.contracts = contracts;
     }
 
     public long getID() {
@@ -29,18 +43,23 @@ public class Employee {
     }
 
     public Contract getContract() {
-        return contract;
+        return contracts.getActual();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Employee setName(String name) {
+        return new Employee(this.ID, name, this.contact, this.contracts);
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
+    public Employee setContact(String contact) {
+        return new Employee(this.ID, this.name, contact, this.contracts);
     }
 
-    public void setContract(Contract contract) {
-        this.contract = contract;
+    public Employee setContract(Contract contract) {
+        contracts.update(contract);
+        return new Employee(this.ID, name, this.contact, this.contracts);
+    }
+
+    public String print() {
+        return ID+") "+name;
     }
 }
