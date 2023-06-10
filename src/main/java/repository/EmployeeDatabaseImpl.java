@@ -1,9 +1,14 @@
+package repository;
+
+import model.Employee;
+import model.Versionable;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class EmployeeDatabase {
-    private List<Versionable<Employee>> database = new ArrayList<>();
+public class EmployeeDatabaseImpl implements EmployeeDatabase{
+
+    private final List<Versionable<Employee>> database = new ArrayList<>();
 
     public void addEmployee(Employee e) {
         Versionable<Employee> newElement = new Versionable<>(e);
@@ -19,16 +24,16 @@ public class EmployeeDatabase {
         }
     }
 
-    public void editEmployee(Employee newVersion) {
+    public void editEmployee(Employee newVersion, long id) {
         for (Versionable<Employee> employeeVersionable : database) {
-            if (employeeVersionable.getActual().getID() == newVersion.getID()) {
+            if (employeeVersionable.getActual().getID() == id) {
                 employeeVersionable.update(newVersion);
                 break;
             }
         }
     }
 
-    public List<Versionable<Employee>> getDatabase() {
+    public List<Versionable<Employee>> getEmployees() {
         return database;
     }
 

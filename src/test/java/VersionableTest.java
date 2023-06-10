@@ -1,5 +1,7 @@
+import model.*;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,8 +13,8 @@ public class VersionableTest {
 
     @Test
     public void undoTest(){
-        Employee e1 = new Employee("Marcos", "123456789", new FullTimeContract(new Date(),
-                new Date(2023, Calendar.JULY,14), 14));
+        Employee e1 = new Employee("Marcos", "123456789", new FullTimeContract(LocalDate.now(),
+                LocalDate.of(2023, Calendar.JULY,14), 14));
         Versionable<Employee> versionable = new Versionable<>(e1);
         Employee e2 = e1.setName("Marco Antonio");
         Employee e3 = e2.setContact("987654321");
@@ -25,8 +27,8 @@ public class VersionableTest {
 
     @Test
     public void redoTest(){
-        Employee e1 = new Employee("Marco", "123456789", new FullTimeContract(new Date(),
-                new Date(2023, Calendar.JUNE,14), 14));
+        Employee e1 = new Employee("Marco", "123456789", new FullTimeContract(LocalDate.now(),
+                LocalDate.of(2023, Calendar.JUNE,14), 14));
         Versionable<Employee> versionable = new Versionable<>(e1);
         Employee e2 = e1.setName("Marco Antonio");
         Employee e3 = e2.setContact("987654321");
@@ -41,8 +43,8 @@ public class VersionableTest {
 
     @Test
     public void updateInTheMiddleTest(){
-        Employee e1 = new Employee("Marcos", "123456789", new FullTimeContract(new Date(),
-                new Date(2023, Calendar.JUNE,14), 14));
+        Employee e1 = new Employee("Marcos", "123456789", new FullTimeContract(LocalDate.now(),
+                LocalDate.of(2023, Calendar.JUNE,14), 14));
         Versionable<Employee> versionable = new Versionable<>(e1);
         Employee e2 = e1.setName("Marco Antonio");
         Employee e3 = e2.setContact("987654321");
@@ -54,23 +56,23 @@ public class VersionableTest {
         versionable.undo();
         versionable.undo();
         versionable.undo();
-        assertEquals(4, versionable.history.size());
+        assertEquals(4, versionable.getHistory().size());
         versionable.update(e5);
-        assertEquals(2, versionable.history.size());
+        assertEquals(2, versionable.getHistory().size());
     }
 
     //Contract Versionable
 
     @Test
     public void contactsVersionsTest(){
-        Employee e1 = new Employee("Marcos", "123456789", new FullTimeContract(new Date(2023, Calendar.JUNE,9),
-                new Date(2023, Calendar.JUNE,14), 14));
+        Employee e1 = new Employee("Marcos", "123456789", new FullTimeContract(LocalDate.of(2023, Calendar.JUNE,9),
+                LocalDate.of(2023, Calendar.JUNE,14), 14));
 
-        assertEquals(336,e1.getContract().calculate(new Date(2023, Calendar.JUNE,12)));
+        assertEquals(336,e1.getContract().calculate(LocalDate.of(2023, Calendar.JUNE,12)));
 
-        e1.contracts.update(new TotalHourContract(e1.getContract().getStartDate(),
+        e1.getContracts().update(new TotalHourContract(e1.getContract().getStartDate(),
                 e1.getContract().getFinishDate(),e1.getContract().getPayPerHour(),5));
 
-        assertEquals(42,(int) e1.getContract().calculate(new Date(2023, Calendar.JUNE,12)));
+        assertEquals(42,(int) e1.getContract().calculate(LocalDate.of(2023, Calendar.JUNE,12)));
     }
 }

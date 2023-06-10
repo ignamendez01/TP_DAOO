@@ -1,12 +1,16 @@
+package model;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Versionable<T> {
-    List<T> history = new ArrayList<>();
-    int pointer = 0;
+
+    private List<T> history = new ArrayList<>();
+    private int pointer;
 
     public Versionable(T element) {
-        history.add(element);
+        this.history.add(element);
+        this.pointer = 0;
     }
 
     public T getActual() {
@@ -42,5 +46,9 @@ public class Versionable<T> {
         }else{
             System.out.println("This is your last version");
         }
+    }
+
+    public List<T> getHistory() {
+        return history;
     }
 }

@@ -1,4 +1,6 @@
-import java.util.Date;
+package model;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public class Payroll {
@@ -9,7 +11,7 @@ public class Payroll {
         this.employees = employees;
     }
 
-    public float calculate(Date date) {
+    public float calculate(LocalDate date) {
         float total = 0.0F;
         for (Employee employee: employees) {
             total = total + employee.getContract().calculate(date);
