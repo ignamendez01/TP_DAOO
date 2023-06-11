@@ -1,7 +1,7 @@
 import model.DataProvider;
-import model.Employee;
-import model.FullTimeContract;
-import model.TotalHourContract;
+import model.entities.employee.Employee;
+import model.entities.contract.FullTimeContract;
+import model.entities.contract.TotalHourContract;
 
 import java.time.LocalDate;
 import java.util.List;

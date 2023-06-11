@@ -1,9 +1,10 @@
+import model.entities.contract.FullTimeContract;
+import model.entities.employee.Employee;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
-import model.*;
+
 import repository.EmployeeDatabase;
 import repository.EmployeeDatabaseImpl;
 
@@ -47,7 +48,7 @@ public class DatabaseTest{
 
         Employee e4 = e2.setContact("111111111");
 
-        database.editEmployee(e4, e4.getID());
+        database.editEmployeeById(e4, e4.getID());
 
         assertEquals("111111111",database.getEmployeeById(2).getPhoneNumber());
     }

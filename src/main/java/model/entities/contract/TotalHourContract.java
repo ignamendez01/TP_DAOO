@@ -1,4 +1,4 @@
-package model;
+package model.entities.contract;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -6,7 +6,7 @@ import java.time.temporal.ChronoUnit;
 
 public class TotalHourContract extends Contract {
 
-    private double totalHours;
+    private final double totalHours;
     public TotalHourContract(LocalDate startDate, LocalDate finishDate, double payPerHour, double totalHours) {
         super(startDate, finishDate, payPerHour);
         this.totalHours = totalHours;
@@ -25,5 +25,18 @@ public class TotalHourContract extends Contract {
         } else {
             return 0.0F;
         }
+    }
+
+    public double getTotalHours() {
+        return totalHours;
+    }
+
+    @Override
+    public void print() {
+        System.out.println("Contract: Total hour contract");
+        System.out.println("Starting date: " + getStartDate().toString());
+        System.out.println("Finish date: " + getFinishDate().toString());
+        System.out.println("Pay per hour: " + getPayPerHour());
+        System.out.println("Total hours: " + getTotalHours());
     }
 }

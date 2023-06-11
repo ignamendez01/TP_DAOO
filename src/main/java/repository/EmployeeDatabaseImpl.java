@@ -1,6 +1,6 @@
 package repository;
 
-import model.Employee;
+import model.entities.employee.Employee;
 import model.Versionable;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class EmployeeDatabaseImpl implements EmployeeDatabase{
     }
 
     public EmployeeDatabaseImpl(List<Versionable<Employee>> database) {
-        this.id = database.size();
+        this.id = database.size() + 1;
         this.database = database;
     }
 
@@ -36,7 +36,7 @@ public class EmployeeDatabaseImpl implements EmployeeDatabase{
         }
     }
 
-    public void editEmployee(Employee newVersion, long id) {
+    public void editEmployeeById(Employee newVersion, long id) {
         for (Versionable<Employee> employeeVersionable : database) {
             if (employeeVersionable.getActual().getID() == id) {
                 employeeVersionable.update(newVersion);
@@ -70,4 +70,16 @@ public class EmployeeDatabaseImpl implements EmployeeDatabase{
             return e;
         }
     }
+
+    @Override
+    public Versionable<Employee> getEmployeeVersionableById(long id) {
+        for (Versionable<Employee> employeeVersionable : database) {
+            if (employeeVersionable.getActual().getID() == id) {
+                return employeeVersionable;
+            }
+        }
+        return null;
+    }
+
+
 }

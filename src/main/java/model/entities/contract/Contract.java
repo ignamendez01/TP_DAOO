@@ -1,4 +1,4 @@
-package model;
+package model.entities.contract;
 
 import java.time.LocalDate;
 
@@ -27,4 +27,6 @@ public abstract class Contract {
     }
 
     public abstract double calculate(LocalDate date);
+
+    public abstract void print();
 }

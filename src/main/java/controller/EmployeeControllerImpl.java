@@ -1,11 +1,9 @@
 package controller;
 
-import model.Employee;
-import model.Versionable;
+import model.entities.employee.Employee;
 import usescases.EmployeeUseCase;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class EmployeeControllerImpl implements EmployeeController{
 
@@ -21,11 +19,6 @@ public class EmployeeControllerImpl implements EmployeeController{
     }
 
     @Override
-    public List<Versionable<Employee>> getEmployee() {
-        return employeeUseCase.getEmployees();
-    }
-
-    @Override
     public void editEmployee(Employee employee, long id) {
         employeeUseCase.editEmployee(employee, id);
     }
@@ -33,6 +26,31 @@ public class EmployeeControllerImpl implements EmployeeController{
     @Override
     public double calculatePayroll(LocalDate localDate) {
         return employeeUseCase.calculatePayroll(localDate);
+    }
+
+    @Override
+    public Employee undo(long employeeId) {
+        return employeeUseCase.undo(employeeId);
+    }
+
+    @Override
+    public Employee redo(long employeeId) {
+        return employeeUseCase.redo(employeeId);
+    }
+
+    @Override
+    public Employee getEmployee(String employeeName) {
+        return employeeUseCase.getEmployee(employeeName);
+    }
+
+    @Override
+    public void deleteEmployee(long employeeId) {
+        employeeUseCase.deleteEmployee(employeeId);
+    }
+
+    @Override
+    public void printEmployees() {
+        employeeUseCase.printEmployees();
     }
 
 }

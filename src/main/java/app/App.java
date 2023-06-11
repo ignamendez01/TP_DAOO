@@ -1,12 +1,14 @@
 package app;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Scanner;
 
 import controller.EmployeeController;
 import controller.EmployeeControllerImpl;
-import model.*;
+import model.entities.contract.Contract;
+import model.entities.contract.FullTimeContract;
+import model.entities.contract.TotalHourContract;
+import model.entities.employee.Employee;
 import repository.EmployeeDatabaseImpl;
 import usescases.EmployeeUseCaseImpl;
 
@@ -17,7 +19,7 @@ public class App {
     private static final EmployeeController employeeController = new EmployeeControllerImpl(new EmployeeUseCaseImpl(new EmployeeDatabaseImpl(new InitialDatabase().getEmployeeList())));
 
     public static void main(String[] args) {
-        printInitialMenu();
+        printInitialScreen();
         Scanner scanner = new Scanner(System.in);
         int decision = scanner.nextInt();
         while (decision != 0) {
@@ -32,7 +34,7 @@ public class App {
                     manageUsers();
                 }
             }
-            printInitialMenu();
+            printInitialScreen();
             decision = scanner.nextInt();
         }
     }
@@ -54,29 +56,30 @@ public class App {
     }
 
     private static void manageUsers() {
-        printManageUsersMenu();
+        printManageUsersScreen();
         Scanner scanner = new Scanner(System.in);
         int decision = scanner.nextInt();
         while (decision != 0) {
             switch (decision) {
                 case 1 -> {
-                    adduser();
+                    addEmployee();
                 }
                 case 2 -> {
-                    editUser();
+                    editEmployee();
                 }
                 case 3 -> {
-                    deleteUser();
+                    deleteEmployee();
+                }
+                case 4 -> {
+                    viewAllEmployees();
                 }
             }
-            printManageUsersMenu();
+            printManageUsersScreen();
             decision = scanner.nextInt();
         }
     }
 
-
-
-    private static void adduser() {
+    private static void addEmployee() {
         String name = InputReader.getString("Enter employee full name: ");
         String phoneNumber = InputReader.getString("Enter employee phoneNumber: ");
         Contract contract = getContract();
@@ -84,51 +87,59 @@ public class App {
         employeeController.addEmployee(employee);
     }
 
-    private static void editUser() {
-        List<Versionable<Employee>> employees = employeeController.getEmployee();
+    private static void editEmployee() {
         String employeeName = InputReader.getString("Select a employee to modify: ");
-        Employee employee = null;
-        for (Versionable<Employee> employeeVersionable : employees) {
-            if (employeeVersionable.getActual().getName().equalsIgnoreCase(employeeName)) {
-                employee = employeeVersionable.getActual();
-                break;
-            }
-        }
+        Employee employee = employeeController.getEmployee(employeeName);
         if (employee == null) {
             System.out.println("That employee does not exist, please select an existing employee");
-            editUser();
+            editEmployee();
         }
         else {
-            chooseEditScreen();
             chooseEdit(employee);
         }
     }
 
-
-
     private static void chooseEdit(Employee employee) {
+        printEmployeeDataScreen(employee);
+        chooseEditScreen();
         Scanner scanner = new Scanner(System.in);
         int decision = scanner.nextInt();
-        Employee updatedEmployee;
-        switch (decision) {
-            case 1 -> {
-                String name = InputReader.getString("Enter employee full name: ");
-                String phoneNumber = InputReader.getString("Enter employee phoneNumber: ");
-                updatedEmployee = new Employee(name, phoneNumber, employee.getContract());
+        Employee updatedEmployee = employee;
+        while (decision != 0) {
+            switch (decision) {
+                case 1 -> {
+                    String name = InputReader.getString("Enter employee full name: ");
+                    String phoneNumber = InputReader.getString("Enter employee phoneNumber: ");
+                    updatedEmployee = new Employee(employee.getID(), name, phoneNumber, employee.getContract());
+                    employeeController.editEmployee(updatedEmployee, employee.getID());
+                }
+                case 2 -> {
+                    Contract contract = getContract();
+                    updatedEmployee = new Employee(employee.getID(), employee.getName(), employee.getPhoneNumber(), contract);
+                    employeeController.editEmployee(updatedEmployee, employee.getID());
+                }
+                case 3 -> {
+                    Employee undoEmployee = employeeController.undo(employee.getID());
+                    if (undoEmployee != null) updatedEmployee = undoEmployee;
+                }
+                case 4 -> {
+                    Employee redoEmployee = employeeController.redo(employee.getID());
+                    if (redoEmployee != null) updatedEmployee = redoEmployee;
+                }
+                default -> {
+                    System.out.println("Please select a valid option");
+                    chooseEdit(employee);
+                }
             }
-            case 2 -> {
-                Contract contract = getContract();
-                updatedEmployee = new Employee(employee.getName(), employee.getPhoneNumber(), contract);
-
-            }
-            default -> updatedEmployee = null;
+            printEmployeeDataScreen(updatedEmployee);
+            chooseEditScreen();
+            decision = scanner.nextInt();
         }
-        employeeController.editEmployee(updatedEmployee, employee.getID());
     }
 
     private static Contract getContract() {
         Contract contract = null;
-        System.out.println("Now specify contract");
+        chooseContractScreen();
         Scanner scanner = new Scanner(System.in);
         int decision = scanner.nextInt();
         switch (decision) {
@@ -150,10 +161,20 @@ public class App {
     }
 
 
-    private static void deleteUser() {
-
+    private static void deleteEmployee() {
+        String employeeName = InputReader.getString("Select a employee to modify: ");
+        Employee employee = employeeController.getEmployee(employeeName);
+        if (employee == null) {
+            System.out.println("That employee does not exist, please select an existing employee");
+            editEmployee();
+        }
+        else {
+            employeeController.deleteEmployee(employee.getID());
+        }
     }
 
-
+    private static void viewAllEmployees() {
+        employeeController.printEmployees();
+    }
 
 }

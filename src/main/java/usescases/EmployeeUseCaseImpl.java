@@ -1,6 +1,6 @@
 package usescases;
 
-import model.Employee;
+import model.entities.employee.Employee;
 import model.Versionable;
 import repository.EmployeeDatabase;
 
@@ -21,13 +21,13 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     }
 
     @Override
-    public List<Versionable<Employee>> getEmployees() {
-        return employeeDatabase.getEmployees();
+    public void printEmployees() {
+        employeeDatabase.print();
     }
 
     @Override
     public void editEmployee(Employee employee, long id) {
-        employeeDatabase.editEmployee(employee, id);
+        employeeDatabase.editEmployeeById(employee, id);
     }
 
     @Override
@@ -38,6 +38,47 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
             payRoll = payRoll + employee.getActual().getContracts().getActual().calculate(localDate);
         }
         return payRoll;
+    }
+
+    @Override
+    public Employee undo(long employeeId) {
+        Versionable<Employee> versionableEmployee = employeeDatabase.getEmployeeVersionableById(employeeId);
+        if (versionableEmployee != null) {
+            versionableEmployee.undo();
+        }
+        else {
+            System.out.println("Employee does not exist with id: " + employeeId);
+        }
+        assert versionableEmployee != null;
+        return versionableEmployee.getActual();
+    }
+
+    @Override
+    public Employee redo(long employeeId) {
+        Versionable<Employee> versionableEmployee = employeeDatabase.getEmployeeVersionableById(employeeId);
+        if (versionableEmployee != null) {
+            versionableEmployee.redo();
+        }
+        else {
+            System.out.println("Employee does not exist with id: " + employeeId);
+        }
+        assert versionableEmployee != null;
+        return versionableEmployee.getActual();
+    }
+
+    @Override
+    public Employee getEmployee(String employeeName) {
+        for (Versionable<Employee> employeeVersionable : employeeDatabase.getEmployees()) {
+            if (employeeVersionable.getActual().getName().equalsIgnoreCase(employeeName)) {
+                return employeeVersionable.getActual();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteEmployee(long employeeId) {
+        employeeDatabase.removeEmployee(employeeId);
     }
 
 }

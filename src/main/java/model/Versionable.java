@@ -44,7 +44,7 @@ public class Versionable<T> {
         if (pointer < history.size()-1){
             pointer++;
         }else{
-            System.out.println("This is your last version");
+            System.out.println("This is your latest version");
         }
     }
 

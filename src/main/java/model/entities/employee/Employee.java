@@ -1,4 +1,7 @@
-package model;
+package model.entities.employee;
+
+import model.Versionable;
+import model.entities.contract.Contract;
 
 public class Employee {
     private long ID;

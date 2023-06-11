@@ -1,4 +1,5 @@
 import model.*;
+import model.entities.employee.Employee;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

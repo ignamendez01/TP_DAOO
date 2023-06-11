@@ -1,15 +1,17 @@
 package controller;
 
-import model.Employee;
-import model.Versionable;
+import model.entities.employee.Employee;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface EmployeeController {
 
     void addEmployee(Employee employee);
-    List<Versionable<Employee>> getEmployee();
     void editEmployee(Employee employee, long id);
     double calculatePayroll(LocalDate localDate);
+    Employee undo(long employeeId);
+    Employee redo(long employeeId);
+    Employee getEmployee(String employeeName);
+    void deleteEmployee(long employeeId);
+    void printEmployees();
 }

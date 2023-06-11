@@ -1,6 +1,6 @@
 package repository;
 
-import model.Employee;
+import model.entities.employee.Employee;
 import model.Versionable;
 
 
@@ -10,9 +10,10 @@ public interface EmployeeDatabase {
 
     void addEmployee(Employee e);
     void removeEmployee(long id);
-    void editEmployee(Employee newVersion, long id);
+    void editEmployeeById(Employee newVersion, long id);
     List<Versionable<Employee>> getEmployees();
     void print();
     Employee getEmployeeById(long id);
+    Versionable<Employee> getEmployeeVersionableById(long id);
 
 }
