@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class DatabaseTest{
 
     @Test
-    public void FindEmployeeTest(){
+    public void findEmployeeTest(){
         EmployeeDatabase database = new EmployeeDatabaseImpl();
 
         Employee e1 = new Employee("Marco Antonio", "123456789", new FullTimeContract(LocalDate.of(2023, Calendar.JUNE,9),

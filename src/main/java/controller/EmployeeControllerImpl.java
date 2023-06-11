@@ -4,6 +4,7 @@ import model.Employee;
 import model.Versionable;
 import usescases.EmployeeUseCase;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class EmployeeControllerImpl implements EmployeeController{
@@ -27,6 +28,11 @@ public class EmployeeControllerImpl implements EmployeeController{
     @Override
     public void editEmployee(Employee employee, long id) {
         employeeUseCase.editEmployee(employee, id);
+    }
+
+    @Override
+    public double calculatePayroll(LocalDate localDate) {
+        return employeeUseCase.calculatePayroll(localDate);
     }
 
 }

@@ -7,11 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDatabaseImpl implements EmployeeDatabase{
-    long quantity = 1;
-    private final List<Versionable<Employee>> database = new ArrayList<>();
+
+    long id;
+    private final List<Versionable<Employee>> database;
+
+    public EmployeeDatabaseImpl() {
+        this.id = 1;
+        this.database = new ArrayList<>();
+    }
+
+    public EmployeeDatabaseImpl(List<Versionable<Employee>> database) {
+        this.id = database.size();
+        this.database = database;
+    }
 
     public void addEmployee(Employee e) {
-        e.setID(quantity++);
+        e.setID(id++);
         Versionable<Employee> newElement = new Versionable<>(e);
         database.add(newElement);
     }

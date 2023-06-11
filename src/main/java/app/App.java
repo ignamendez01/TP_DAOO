@@ -7,17 +7,14 @@ import java.util.Scanner;
 import controller.EmployeeController;
 import controller.EmployeeControllerImpl;
 import model.*;
-import repository.EmployeeDatabase;
 import repository.EmployeeDatabaseImpl;
-import usescases.EmployeeUseCase;
 import usescases.EmployeeUseCaseImpl;
 
+import static app.Screen.*;
 
 public class App {
 
-    private static final EmployeeDatabase employeeDatabase = new EmployeeDatabaseImpl();
-    private static final EmployeeUseCase employeeService = new EmployeeUseCaseImpl(employeeDatabase);
-    private static final EmployeeController employeeController = new EmployeeControllerImpl(employeeService);
+    private static final EmployeeController employeeController = new EmployeeControllerImpl(new EmployeeUseCaseImpl(new EmployeeDatabaseImpl(new InitialDatabase().getEmployeeList())));
 
     public static void main(String[] args) {
         printInitialMenu();
@@ -40,24 +37,16 @@ public class App {
         }
     }
 
-    private static void printInitialMenu() {
-        System.out.println("***************************************");
-        System.out.println("Welcome to Administration");
-        System.out.println("1. Calculate Payroll");
-        System.out.println("2. Generate Payroll Report");
-        System.out.println("3. Manage Employees");
-        System.out.println("0. Exit");
-    }
-
     private static void calculatePayroll() {
+        System.out.println();
         System.out.println("***************************************");
-        System.out.println("Insert day to calculate payroll");
-        Scanner scan = new Scanner(System.in);
-        // logica para calcular payroll
-        // imprimir payroll
+        LocalDate localDate = InputReader.getDate("Insert day to calculate payroll (dd-MM-yyyy): ");
+        double payroll = employeeController.calculatePayroll(localDate);
+        System.out.println("You have to pay: " + payroll + " " + "at the date: " + localDate.toString());
     }
 
     private static void generatePayrollReport() {
+        System.out.println();
         System.out.println("***************************************");
         System.out.println("Insert day to generate payroll report");
         // generar el reporte
@@ -85,12 +74,7 @@ public class App {
         }
     }
 
-    private static void printManageUsersMenu() {
-        System.out.println("1. Add new user");
-        System.out.println("2. Edit user");
-        System.out.println("3. Delete user");
-        System.out.println("0. Go back");
-    }
+
 
     private static void adduser() {
         String name = InputReader.getString("Enter employee full name: ");
@@ -120,10 +104,7 @@ public class App {
         }
     }
 
-    private static void chooseEditScreen() {
-        System.out.println("1. Change employee data");
-        System.out.println("2. Change employee contract");
-    }
+
 
     private static void chooseEdit(Employee employee) {
         Scanner scanner = new Scanner(System.in);
