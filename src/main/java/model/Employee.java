@@ -5,14 +5,12 @@ public class Employee {
     String name;
     String phoneNumber;
     Versionable<Contract> contracts;
-    private static long ids = 0;
 
     public Employee(Contract contract) {
         this.contracts = new Versionable<>(contract);
     }
 
     public Employee(String name, String phoneNumber, Contract contract) {
-        this.ID = ++Employee.ids;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.contracts = new Versionable<>(contract);
@@ -67,6 +65,10 @@ public class Employee {
 
     public Versionable<Contract> getContracts() {
         return contracts;
+    }
+
+    public void setID(long ID) {
+        this.ID = ID;
     }
 }
 
