@@ -11,8 +11,8 @@ public class Payroll {
         this.employees = employees;
     }
 
-    public float calculate(LocalDate date) {
-        float total = 0.0F;
+    public double calculate(LocalDate date) {
+        double total = 0.0;
         for (Employee employee: employees) {
             total = total + employee.getContract().calculate(date);
         }

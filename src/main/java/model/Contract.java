@@ -6,9 +6,9 @@ public abstract class Contract {
 
     private LocalDate startDate;
     private LocalDate finishDate;
-    private float payPerHour;
+    private double payPerHour;
 
-    public Contract(LocalDate startDate, LocalDate finishDate, float payPerHour) {
+    public Contract(LocalDate startDate, LocalDate finishDate, double payPerHour) {
         this.startDate = startDate;
         this.finishDate = finishDate;
         this.payPerHour = payPerHour;
@@ -22,9 +22,9 @@ public abstract class Contract {
         return finishDate;
     }
 
-    public float getPayPerHour() {
+    public double getPayPerHour() {
         return payPerHour;
     }
 
-    public abstract float calculate(LocalDate date);
+    public abstract double calculate(LocalDate date);
 }

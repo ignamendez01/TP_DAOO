@@ -4,6 +4,7 @@ import model.Employee;
 import model.Versionable;
 import repository.EmployeeDatabase;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class EmployeeUseCaseImpl implements EmployeeUseCase{
@@ -27,6 +28,16 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     @Override
     public void editEmployee(Employee employee, long id) {
         employeeDatabase.editEmployee(employee, id);
+    }
+
+    @Override
+    public double calculatePayroll(LocalDate localDate) {
+        double payRoll = 0.0;
+        List<Versionable<Employee>> employees = employeeDatabase.getEmployees();
+        for (Versionable<Employee> employee: employees) {
+            payRoll = payRoll + employee.getActual().getContracts().getActual().calculate(localDate);
+        }
+        return payRoll;
     }
 
 }

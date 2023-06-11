@@ -6,15 +6,15 @@ import java.time.temporal.ChronoUnit;
 public class FullTimeContract extends Contract {
 
     private final float hoursPerDay;
-    public FullTimeContract(LocalDate startDate, LocalDate finishDate, float payPerHour) {
+    public FullTimeContract(LocalDate startDate, LocalDate finishDate, double payPerHour) {
         super(startDate, finishDate, payPerHour);
         this.hoursPerDay = 8.0F;
     }
 
     @Override
-    public float calculate(LocalDate date) {
+    public double calculate(LocalDate date) {
         if (date.isAfter(this.getStartDate())) {
-            long timeDifference;
+            double timeDifference;
             if (date.isBefore(this.getFinishDate())) {
                 timeDifference = ChronoUnit.DAYS.between(this.getStartDate(), date);
             } else {
