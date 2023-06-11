@@ -11,8 +11,7 @@ public class EmployeeDatabaseImpl implements EmployeeDatabase{
     private final List<Versionable<Employee>> database = new ArrayList<>();
 
     public void addEmployee(Employee e) {
-        e.setID(quantity);
-        quantity++;
+        e.setID(quantity++);
         Versionable<Employee> newElement = new Versionable<>(e);
         database.add(newElement);
     }
