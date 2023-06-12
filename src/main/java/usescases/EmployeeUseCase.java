@@ -1,8 +1,10 @@
 package usescases;
 
+import model.dto.EmployeeReportDto;
 import model.entities.employee.Employee;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface EmployeeUseCase {
 
@@ -14,4 +16,5 @@ public interface EmployeeUseCase {
     Employee redo(long employeeId);
     Employee getEmployee(String employeeName);
     void deleteEmployee(long employeeId);
+    List<EmployeeReportDto> generatePayrollReport(LocalDate localDate);
 }

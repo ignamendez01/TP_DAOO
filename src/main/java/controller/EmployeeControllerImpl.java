@@ -1,9 +1,11 @@
 package controller;
 
+import model.dto.EmployeeReportDto;
 import model.entities.employee.Employee;
 import usescases.EmployeeUseCase;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class EmployeeControllerImpl implements EmployeeController{
 
@@ -51,6 +53,11 @@ public class EmployeeControllerImpl implements EmployeeController{
     @Override
     public void printEmployees() {
         employeeUseCase.printEmployees();
+    }
+
+    @Override
+    public List<EmployeeReportDto> generatePayrollReport(LocalDate localDate) {
+        return employeeUseCase.generatePayrollReport(localDate);
     }
 
 }

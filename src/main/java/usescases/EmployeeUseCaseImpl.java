@@ -1,10 +1,13 @@
 package usescases;
 
+import model.dto.EmployeeReportDto;
 import model.entities.employee.Employee;
 import model.Versionable;
 import repository.EmployeeDatabase;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class EmployeeUseCaseImpl implements EmployeeUseCase{
@@ -79,6 +82,41 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     @Override
     public void deleteEmployee(long employeeId) {
         employeeDatabase.removeEmployee(employeeId);
+    }
+
+    @Override
+    public List<EmployeeReportDto> generatePayrollReport(LocalDate localDate) {
+        ArrayList<EmployeeReportDto> report = new ArrayList<>();
+        for (Versionable<Employee> employee : employeeDatabase.getEmployees()) {
+            double payroll = employee.getActual().getContracts().getActual().calculate(localDate);
+            ArrayList<String> changes = analyzeChanges(employee);
+            report.add(new EmployeeReportDto(employee.getActual().getName(), payroll, changes));
+        }
+        return report;
+    }
+
+    private ArrayList<String> analyzeChanges(Versionable<Employee> versionableEmployee) {
+        ArrayList<String> changes = new ArrayList<>();
+        Employee lastVersion = versionableEmployee.getActual();
+        List<Employee> history = versionableEmployee.getHistory();
+        Collections.reverse(history);
+        for (Employee employee: history) {
+            if (lastVersion.equals(employee)) continue;
+            if (!lastVersion.getName().equals(employee.getName())) {
+                changes.add("Name: " + employee.getName() + " ---> " + lastVersion.getName());
+            }
+            if (!lastVersion.getPhoneNumber().equals(employee.getPhoneNumber())) {
+                changes.add("PhoneNumber: " + employee.getPhoneNumber() + " ---> " + lastVersion.getPhoneNumber());
+            }
+            if (!lastVersion.getContract().equals(employee.getContract())) {
+                changes.add("Contract Changes.");
+            }
+            lastVersion = employee;
+        }
+        if (changes.size() == 0) {
+            changes.add("No Changes.");
+        }
+        return changes;
     }
 
 }

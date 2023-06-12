@@ -1,8 +1,10 @@
 package controller;
 
+import model.dto.EmployeeReportDto;
 import model.entities.employee.Employee;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface EmployeeController {
 
@@ -14,4 +16,5 @@ public interface EmployeeController {
     Employee getEmployee(String employeeName);
     void deleteEmployee(long employeeId);
     void printEmployees();
+    List<EmployeeReportDto> generatePayrollReport(LocalDate localDate);
 }

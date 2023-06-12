@@ -1,10 +1,13 @@
 package app;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import controller.EmployeeController;
 import controller.EmployeeControllerImpl;
+import model.Versionable;
+import model.dto.EmployeeReportDto;
 import model.entities.contract.Contract;
 import model.entities.contract.FullTimeContract;
 import model.entities.contract.TotalHourContract;
@@ -50,9 +53,16 @@ public class App {
     private static void generatePayrollReport() {
         System.out.println();
         System.out.println("***************************************");
-        System.out.println("Insert day to generate payroll report");
-        // generar el reporte
-        // imprimir el reporte
+        LocalDate localDate = InputReader.getDate("Insert day to generate payroll report (dd-MM-yyyy): ");
+        ArrayList<EmployeeReportDto> reports = (ArrayList<EmployeeReportDto>) employeeController.generatePayrollReport(localDate);
+        for (EmployeeReportDto report: reports) {
+            System.out.println("Report Employee: " + report.getName());
+            System.out.println("- Payroll: " + report.getPayroll());
+            System.out.println("- Changes:");
+            for (String str: report.getChanges()) {
+                System.out.println("   - " + str);
+            }
+        }
     }
 
     private static void manageUsers() {
@@ -88,6 +98,7 @@ public class App {
     }
 
     private static void editEmployee() {
+        employeeController.printEmployees();
         String employeeName = InputReader.getString("Select a employee to modify: ");
         Employee employee = employeeController.getEmployee(employeeName);
         if (employee == null) {
