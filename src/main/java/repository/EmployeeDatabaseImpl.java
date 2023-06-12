@@ -49,12 +49,6 @@ public class EmployeeDatabaseImpl implements EmployeeDatabase{
         return database;
     }
 
-    public void print() {
-        for (Versionable<Employee> e : database) {
-            System.out.println(e.getActual().print());
-        }
-    }
-
     public Employee getEmployeeById(long id) {
         Employee e = null;
         for (Versionable<Employee> employeeVersionable : database) {
@@ -69,6 +63,16 @@ public class EmployeeDatabaseImpl implements EmployeeDatabase{
         }else {
             return e;
         }
+    }
+
+    @Override
+    public Employee getEmployeeByName(String name) {
+        for (Versionable<Employee> employeeVersionable : getEmployees()) {
+            if (employeeVersionable.getActual().getName().equalsIgnoreCase(name)) {
+                return employeeVersionable.getActual();
+            }
+        }
+        return null;
     }
 
     @Override

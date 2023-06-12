@@ -25,7 +25,9 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
 
     @Override
     public void printEmployees() {
-        employeeDatabase.print();
+        for (int i = 0; i < employeeDatabase.getEmployees().size(); i++) {
+            System.out.println((i+1)+") "+employeeDatabase.getEmployees().get(i).getActual().getName());
+        }
     }
 
     @Override
@@ -71,12 +73,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
 
     @Override
     public Employee getEmployee(String employeeName) {
-        for (Versionable<Employee> employeeVersionable : employeeDatabase.getEmployees()) {
-            if (employeeVersionable.getActual().getName().equalsIgnoreCase(employeeName)) {
-                return employeeVersionable.getActual();
-            }
-        }
-        return null;
+        return employeeDatabase.getEmployeeByName(employeeName);
     }
 
     @Override

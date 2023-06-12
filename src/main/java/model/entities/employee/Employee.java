@@ -62,9 +62,7 @@ public class Employee {
         return new Employee(this.ID, name, this.phoneNumber, this.contracts);
     }
 
-    public String print() {
-        return ID+") "+name;
-    }
+
 
     public Versionable<Contract> getContracts() {
         return contracts;

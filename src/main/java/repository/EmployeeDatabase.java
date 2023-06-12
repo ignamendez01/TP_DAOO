@@ -12,8 +12,9 @@ public interface EmployeeDatabase {
     void removeEmployee(long id);
     void editEmployeeById(Employee newVersion, long id);
     List<Versionable<Employee>> getEmployees();
-    void print();
     Employee getEmployeeById(long id);
+
+    Employee getEmployeeByName(String name);
     Versionable<Employee> getEmployeeVersionableById(long id);
 
 }
