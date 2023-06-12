@@ -18,18 +18,26 @@ public class Versionable<T> {
     }
 
     public void update(T newVersion) {
-        if (pointer == history.size()-1){
+        if (pointerIsInLatestVersion()){
             history.add(newVersion);
             pointer++;
         }else{
-            List<T> newHistory = new ArrayList<>();
-            for (int i = 0; i <= pointer; i++) {
-                newHistory.add(history.get(i));
-            }
-            newHistory.add(newVersion);
-            pointer++;
-            history = newHistory;
+            rewriteHistoryFrom(newVersion);
         }
+    }
+
+    private void rewriteHistoryFrom(T newVersion) {
+        List<T> newHistory = new ArrayList<>();
+        for (int i = 0; i <= pointer; i++) {
+            newHistory.add(history.get(i));
+        }
+        newHistory.add(newVersion);
+        pointer++;
+        history = newHistory;
+    }
+
+    private boolean pointerIsInLatestVersion() {
+        return pointer == history.size() - 1;
     }
 
     public void undo(){

@@ -13,7 +13,7 @@ public class TotalHourContract extends Contract {
     }
 
     @Override
-    public double calculate(LocalDate date) {
+    public double calculate(LocalDate date) { //TODO: Revisar template pattern
         if (date.isAfter(this.getStartDate())) {
             if (date.isBefore(this.getFinishDate())) {
                 double timeDifference = ChronoUnit.DAYS.between(this.getStartDate(), date);
