@@ -98,7 +98,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     private ArrayList<String> analyzeChanges(Versionable<Employee> versionableEmployee) {
         ArrayList<String> changes = new ArrayList<>();
         Employee lastVersion = versionableEmployee.getActual();
-        List<Employee> history = versionableEmployee.getHistory();
+        ArrayList<Employee> history = (ArrayList<Employee>) ((ArrayList<Employee>) versionableEmployee.getHistory()).clone();
         Collections.reverse(history);
         for (Employee employee: history) {
             if (lastVersion.equals(employee)) continue;
