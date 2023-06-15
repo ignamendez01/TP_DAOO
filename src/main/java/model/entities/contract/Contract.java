@@ -1,6 +1,7 @@
 package model.entities.contract;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public abstract class Contract {
 
@@ -10,8 +11,13 @@ public abstract class Contract {
 
     public Contract(LocalDate startDate, LocalDate finishDate, double payPerHour) {
         this.startDate = startDate;
-        this.finishDate = finishDate;
-        this.payPerHour = payPerHour;
+        if (finishDate.isAfter(startDate)){
+            this.finishDate = finishDate;
+            this.payPerHour = payPerHour;
+        }else{
+            throw new RuntimeException("Invalid Date");
+        }
+
     }
 
     public LocalDate getStartDate() {
@@ -26,7 +32,31 @@ public abstract class Contract {
         return payPerHour;
     }
 
-    public abstract double calculate(LocalDate date);
+    public double calculate(LocalDate startPeriodDate, LocalDate endPeriodDate){
+        if (endPeriodDate.isAfter(startPeriodDate)) {
+            if (endPeriodDate.isAfter(startDate)) {
+                if (startPeriodDate.isBefore(startDate)){
+                    if (endPeriodDate.isAfter(finishDate)) {
+                        return calculatePeriod(startDate, finishDate);
+                    } else {
+                        return calculatePeriod(startDate, endPeriodDate);
+                    }
+                }else {
+                    if (endPeriodDate.isAfter(finishDate)) {
+                        return calculatePeriod(startPeriodDate, finishDate);
+                    } else {
+                        return calculatePeriod(startPeriodDate, endPeriodDate);
+                    }
+                }
+            } else {
+                throw new RuntimeException("Invalid period");
+            }
+        }else{
+            throw new RuntimeException("Invalid date");
+        }
+    }
+
+    public abstract double calculatePeriod(LocalDate startDate, LocalDate endPeriodDate);
 
     public abstract void print();
 }

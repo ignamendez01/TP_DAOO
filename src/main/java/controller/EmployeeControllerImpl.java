@@ -26,8 +26,8 @@ public class EmployeeControllerImpl implements EmployeeController{
     }
 
     @Override
-    public double calculatePayroll(LocalDate localDate) {
-        return employeeUseCase.calculatePayroll(localDate);
+    public double calculatePayroll(LocalDate startPeriodDate, LocalDate endPeriodDate) {
+        return employeeUseCase.calculatePayroll(startPeriodDate, endPeriodDate);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class EmployeeControllerImpl implements EmployeeController{
     }
 
     @Override
-    public List<EmployeeReportDto> generatePayrollReport(LocalDate localDate) {
-        return employeeUseCase.generatePayrollReport(localDate);
+    public List<EmployeeReportDto> generatePayrollReport(LocalDate startPeriodDate, LocalDate endPeriodDate) {
+        return employeeUseCase.generatePayrollReport(startPeriodDate, endPeriodDate);
     }
 
 }

@@ -45,16 +45,18 @@ public class App {
     private static void calculatePayroll() {
         System.out.println();
         System.out.println("***************************************");
-        LocalDate localDate = InputReader.getDate("Insert day to calculate payroll (dd-MM-yyyy): ");
-        double payroll = employeeController.calculatePayroll(localDate);
-        System.out.println("You have to pay: " + payroll + " " + "at the date: " + localDate.toString());
+        LocalDate startPeriodDate = InputReader.getDate("Insert first day of period to calculate payroll (dd-MM-yyyy): ");
+        LocalDate endPeriodDate = InputReader.getDate("Insert last day of period to calculate payroll (dd-MM-yyyy): ");
+        double payroll = employeeController.calculatePayroll(startPeriodDate, endPeriodDate);
+        System.out.println("You have to pay: " + payroll + " " + "from: " + startPeriodDate.toString() + " to " + endPeriodDate.toString());
     }
 
     private static void generatePayrollReport() {
         System.out.println();
         System.out.println("***************************************");
-        LocalDate localDate = InputReader.getDate("Insert day to generate payroll report (dd-MM-yyyy): ");
-        ArrayList<EmployeeReportDto> reports = (ArrayList<EmployeeReportDto>) employeeController.generatePayrollReport(localDate);
+        LocalDate startPeriodDate = InputReader.getDate("Insert first day of period to generate payroll report (dd-MM-yyyy): ");
+        LocalDate lastPeriodDate = InputReader.getDate("Insert last day of period to generate payroll report (dd-MM-yyyy): ");
+        ArrayList<EmployeeReportDto> reports = (ArrayList<EmployeeReportDto>) employeeController.generatePayrollReport(startPeriodDate, lastPeriodDate);
         for (EmployeeReportDto report: reports) {
             System.out.println("Report Employee: " + report.getName());
             System.out.println("- Payroll: " + report.getPayroll());

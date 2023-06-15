@@ -70,11 +70,11 @@ public class VersionableTest {
         Employee e1 = new Employee("Marcos", "123456789", new FullTimeContract(LocalDate.of(2023, Calendar.JUNE,9),
                 LocalDate.of(2023, Calendar.JUNE,14), 14));
 
-        assertEquals(336,e1.getContract().calculate(LocalDate.of(2023, Calendar.JUNE,12)));
+        assertEquals(336,e1.getContract().calculate(LocalDate.of(2023, Calendar.JUNE, 1), LocalDate.of(2023, Calendar.JUNE,12)));
 
         e1.getContracts().update(new TotalHourContract(e1.getContract().getStartDate(),
                 e1.getContract().getFinishDate(),e1.getContract().getPayPerHour(),5));
 
-        assertEquals(42,(int) e1.getContract().calculate(LocalDate.of(2023, Calendar.JUNE,12)));
+        assertEquals(42,(int) e1.getContract().calculate(LocalDate.of(2023, Calendar.JUNE, 1), LocalDate.of(2023, Calendar.JUNE,12)));
     }
 }

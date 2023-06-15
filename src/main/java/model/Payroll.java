@@ -13,10 +13,10 @@ public class Payroll {
         this.employees = employees;
     }
 
-    public double calculate(LocalDate date) {
+    public double calculate(LocalDate startPeriodDate, LocalDate endPeriodDate) {
         double total = 0.0;
         for (Employee employee: employees) {
-            total = total + employee.getContract().calculate(date);
+            total = total + employee.getContract().calculate(startPeriodDate, endPeriodDate);
         }
         return total;
     }

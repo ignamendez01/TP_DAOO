@@ -44,7 +44,7 @@ public class Versionable<T> {
         if (pointer > 0){
             pointer--;
         }else{
-            System.out.println("This is your first version");
+            throw new RuntimeException("This is your first version");
         }
     }
 
@@ -52,7 +52,7 @@ public class Versionable<T> {
         if (pointer < history.size()-1){
             pointer++;
         }else{
-            System.out.println("This is your latest version");
+            throw new RuntimeException("This is your latest version");
         }
     }
 

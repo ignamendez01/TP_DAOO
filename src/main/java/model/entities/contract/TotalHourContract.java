@@ -13,18 +13,10 @@ public class TotalHourContract extends Contract {
     }
 
     @Override
-    public double calculate(LocalDate date) { //TODO: Revisar template pattern
-        if (date.isAfter(this.getStartDate())) {
-            if (date.isBefore(this.getFinishDate())) {
-                double timeDifference = ChronoUnit.DAYS.between(this.getStartDate(), date);
-                double totalDaysContract = ChronoUnit.DAYS.between(this.getStartDate(), this.getFinishDate());
-                return this.getPayPerHour() * ((float) timeDifference / (float) totalDaysContract) * totalHours;
-            } else {
-                return this.totalHours * this.getPayPerHour();
-            }
-        } else {
-            return 0.0F;
-        }
+    public double calculatePeriod(LocalDate startDate, LocalDate endPeriodDate) {
+        double timeDifference = ChronoUnit.DAYS.between(startDate, endPeriodDate);
+        double totalDaysContract = ChronoUnit.DAYS.between(this.getStartDate(), this.getFinishDate());
+        return this.getPayPerHour() * ((float) timeDifference / (float) totalDaysContract) * totalHours;
     }
 
     public double getTotalHours() {

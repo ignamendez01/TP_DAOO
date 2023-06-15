@@ -36,11 +36,11 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     }
 
     @Override
-    public double calculatePayroll(LocalDate localDate) {
+    public double calculatePayroll(LocalDate startPeriodDate, LocalDate endPeriodDate) {
         double payRoll = 0.0;
         List<Versionable<Employee>> employees = employeeDatabase.getEmployees();
         for (Versionable<Employee> employee: employees) {
-            payRoll = payRoll + employee.getActual().getContracts().getActual().calculate(localDate);
+            payRoll = payRoll + employee.getActual().getContracts().getActual().calculate(startPeriodDate, endPeriodDate);
         }
         return payRoll;
     }
@@ -82,10 +82,10 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     }
 
     @Override
-    public List<EmployeeReportDto> generatePayrollReport(LocalDate localDate) {
+    public List<EmployeeReportDto> generatePayrollReport(LocalDate startPeriodDate, LocalDate endPeriodDate) {
         ArrayList<EmployeeReportDto> report = new ArrayList<>();
         for (Versionable<Employee> employee : employeeDatabase.getEmployees()) {
-            double payroll = employee.getActual().getContracts().getActual().calculate(localDate);
+            double payroll = employee.getActual().getContracts().getActual().calculate(startPeriodDate, endPeriodDate);
             ArrayList<String> changes = analyzeChanges(employee);
             report.add(new EmployeeReportDto(employee.getActual().getName(), payroll, changes));
         }

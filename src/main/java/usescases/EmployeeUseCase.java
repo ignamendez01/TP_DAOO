@@ -11,10 +11,10 @@ public interface EmployeeUseCase {
     void addEmployee(Employee employee);
     void printEmployees();
     void editEmployee(Employee employee, long id);
-    double calculatePayroll(LocalDate localDate);
+    double calculatePayroll(LocalDate startPeriodDate, LocalDate endPeriodDate);
     Employee undo(long employeeId);
     Employee redo(long employeeId);
     Employee getEmployee(String employeeName);
     void deleteEmployee(long employeeId);
-    List<EmployeeReportDto> generatePayrollReport(LocalDate localDate);
+    List<EmployeeReportDto> generatePayrollReport(LocalDate startPeriodDate, LocalDate endPeriodDate);
 }

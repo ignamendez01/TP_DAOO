@@ -12,18 +12,10 @@ public class FullTimeContract extends Contract {
     }
 
     @Override
-    public double calculate(LocalDate upToDate) { //Cambiar nombres de las variables y del metodo para representar que es lo que hace
-        if (upToDate.isAfter(this.getStartDate())) {
-            double timeDifference;
-            if (upToDate.isBefore(this.getFinishDate())) {
-                timeDifference = ChronoUnit.DAYS.between(this.getStartDate(), upToDate);
-            } else {
-                timeDifference = ChronoUnit.DAYS.between(this.getStartDate(), this.getFinishDate());
-            }
-            return this.getPayPerHour() * this.getHoursPerDay() * timeDifference;
-        } else {
-            return 0.0F;
-        }
+    public double calculatePeriod(LocalDate startDate, LocalDate endPeriodDate) {
+        double timeDifference;
+        timeDifference = ChronoUnit.DAYS.between(startDate, endPeriodDate);
+        return this.getPayPerHour() * this.getHoursPerDay() * timeDifference;
     }
 
     @Override
