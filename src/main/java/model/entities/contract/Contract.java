@@ -34,7 +34,7 @@ public abstract class Contract {
 
     public double calculate(LocalDate startPeriodDate, LocalDate endPeriodDate){
         if (endPeriodDate.isAfter(startPeriodDate)) {
-            if (endPeriodDate.isAfter(startDate)) {
+            if (endPeriodDate.isAfter(startDate)  && startPeriodDate.isBefore(finishDate)) {
                 if (startPeriodDate.isBefore(startDate)){
                     if (endPeriodDate.isAfter(finishDate)) {
                         return calculatePeriod(startDate, finishDate);
