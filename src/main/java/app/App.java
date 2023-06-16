@@ -36,8 +36,15 @@ public class App {
         System.out.println("***************************************");
         LocalDate startPeriodDate = InputReader.getDate("Insert the date from when to calculate payroll (dd-MM-yyyy): ");
         LocalDate endPeriodDate = InputReader.getDate("Insert the date until when to calculate payroll (dd-MM-yyyy): ");
-        double payroll = employeeController.calculatePayroll(startPeriodDate, endPeriodDate);
-        System.out.println("You have to pay: " + payroll + " " + "from: " + startPeriodDate.toString() + " to " + endPeriodDate.toString());
+        try {
+            double payroll = employeeController.calculatePayroll(startPeriodDate, endPeriodDate);
+            System.out.println("You have to pay: " + payroll + " " + "from: " + startPeriodDate.toString() + " to " + endPeriodDate.toString());
+        }
+        catch (Exception e) {
+            System.out.println();
+            System.out.println(e.getMessage());
+        }
+
     }
 
     private static void generatePayrollReport() {
@@ -45,14 +52,20 @@ public class App {
         System.out.println("***************************************");
         LocalDate startPeriodDate = InputReader.getDate("Insert the date from when to generate payroll report (dd-MM-yyyy): ");
         LocalDate lastPeriodDate = InputReader.getDate("Insert the date until when to generate payroll report (dd-MM-yyyy): ");
-        ArrayList<EmployeeReportDto> reports = (ArrayList<EmployeeReportDto>) employeeController.generatePayrollReport(startPeriodDate, lastPeriodDate);
-        for (EmployeeReportDto report: reports) {
-            System.out.println("Report Employee: " + report.getName());
-            System.out.println("- Payroll: " + report.getPayroll());
-            System.out.println("- Changes:");
-            for (String str: report.getChanges()) {
-                System.out.println("   - " + str);
+        try {
+            ArrayList<EmployeeReportDto> reports = (ArrayList<EmployeeReportDto>) employeeController.generatePayrollReport(startPeriodDate, lastPeriodDate);
+            for (EmployeeReportDto report: reports) {
+                System.out.println("Report Employee: " + report.getName());
+                System.out.println("- Payroll: " + report.getPayroll());
+                System.out.println("- Changes:");
+                for (String str: report.getChanges()) {
+                    System.out.println("   - " + str);
+                }
             }
+        }
+        catch (Exception e) {
+            System.out.println();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -116,12 +129,25 @@ public class App {
                     employeeController.editEmployeeContract(updateContractDto);
                 }
                 case 3 -> {
-                    EmployeeDto undoEmployee = employeeController.undo(employee.getId());
-                    if (undoEmployee != null) updatedEmployee = new EmployeeDto(employee.getId(), undoEmployee.getName(), undoEmployee.getPhoneNumber(), employee.getContractDto());
+                    try {
+                        EmployeeDto undoEmployee = employeeController.undo(employee.getId());
+                        if (undoEmployee != null) updatedEmployee = new EmployeeDto(employee.getId(), undoEmployee.getName(), undoEmployee.getPhoneNumber(), employee.getContractDto());
+                    }
+                    catch (Exception e) {
+                        System.out.println();
+                        System.out.println(e.getMessage());
+                    }
                 }
                 case 4 -> {
-                    EmployeeDto redoEmployee = employeeController.redo(employee.getId());
-                    if (redoEmployee != null) updatedEmployee = new EmployeeDto(employee.getId(), redoEmployee.getName(), redoEmployee.getPhoneNumber(), employee.getContractDto());
+                    try {
+                        EmployeeDto redoEmployee = employeeController.redo(employee.getId());
+                        if (redoEmployee != null)
+                            updatedEmployee = new EmployeeDto(employee.getId(), redoEmployee.getName(), redoEmployee.getPhoneNumber(), employee.getContractDto());
+                    }
+                    catch (Exception e) {
+                        System.out.println();
+                        System.out.println(e.getMessage());
+                    }
                 }
                 default -> {
                     System.out.println("Please select a valid option");
@@ -156,7 +182,6 @@ public class App {
         }
         return contract;
     }
-
 
     private static void deleteEmployee() {
         String employeeName = InputReader.getString("Select a employee to modify: ");

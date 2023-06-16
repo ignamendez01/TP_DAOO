@@ -61,19 +61,12 @@ public class EmployeeDatabaseImpl implements EmployeeDatabase{
     }
 
     public Employee getEmployeeById(long id) {
-        Employee e = null;
         for (Versionable<Employee> employeeVersionable : database) {
             if (employeeVersionable.getActual().getId() == id) {
-                e = employeeVersionable.getActual();
-                break;
+                return employeeVersionable.getActual();
             }
         }
-        if (e == null){
-            System.out.println("Employee not found");
-            return null;
-        }else {
-            return e;
-        }
+        throw new RuntimeException("Employee not found");
     }
 
     @Override
@@ -93,7 +86,7 @@ public class EmployeeDatabaseImpl implements EmployeeDatabase{
                 return employeeVersionable;
             }
         }
-        return null;
+        throw new RuntimeException("Employee does not exist with id: " + id);
     }
 
 

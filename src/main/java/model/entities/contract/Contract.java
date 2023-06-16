@@ -50,7 +50,7 @@ public abstract class Contract {
             }
             else return 0.0;
         }
-        else throw new RuntimeException("Invalid date");
+        else throw new RuntimeException("From date must be before until date");
     }
 
     private double calculatePeriod(LocalDate startPeriod, LocalDate endPeriod){

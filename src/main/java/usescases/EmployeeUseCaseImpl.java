@@ -66,11 +66,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
         double payRoll = 0.0;
         List<Versionable<Employee>> employees = employeeDatabase.getEmployees();
         for (Versionable<Employee> employee: employees) {
-            try{
-                payRoll = payRoll + employee.getActual().getContract().getActual().calculate(startPeriodDate, endPeriodDate);
-            }catch (Exception e){
-                System.out.println(e.getMessage() +" for the payroll calculation of "+ employee.getActual().getName());
-            }
+            payRoll = payRoll + employee.getActual().getContract().getActual().calculate(startPeriodDate, endPeriodDate);
         }
         return payRoll;
     }
@@ -78,18 +74,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     @Override
     public EmployeeDto undo(long employeeId) {
         Versionable<Employee> versionableEmployee = employeeDatabase.getEmployeeVersionableById(employeeId);
-        if (versionableEmployee != null) {
-            try {
-                versionableEmployee.undo();
-            }
-            catch (Exception e){
-                System.out.println(e.getMessage());
-            }
-        }
-        else {
-            System.out.println("Employee does not exist with id: " + employeeId);
-        }
-        assert versionableEmployee != null;
+        versionableEmployee.undo();
         Employee newEmployee = versionableEmployee.getActual();
         return new EmployeeDto(newEmployee.getName(), newEmployee.getPhoneNumber());
     }
@@ -97,17 +82,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     @Override
     public EmployeeDto redo(long employeeId) {
         Versionable<Employee> versionableEmployee = employeeDatabase.getEmployeeVersionableById(employeeId);
-        if (versionableEmployee != null) {
-            try {
-                versionableEmployee.redo();
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
-        }
-        else {
-            System.out.println("Employee does not exist with id: " + employeeId);
-        }
-        assert versionableEmployee != null;
+        versionableEmployee.redo();
         Employee newEmployee = versionableEmployee.getActual();
         return new EmployeeDto(newEmployee.getName(), newEmployee.getPhoneNumber());
     }
@@ -135,13 +110,9 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     public List<EmployeeReportDto> generatePayrollReport(LocalDate startPeriodDate, LocalDate endPeriodDate) {
         ArrayList<EmployeeReportDto> report = new ArrayList<>();
         for (Versionable<Employee> employee : employeeDatabase.getEmployees()) {
-            try{
-                double payroll = employee.getActual().getContract().getActual().calculate(startPeriodDate, endPeriodDate);
-                ArrayList<String> changes = analyzeChanges(employee);
-                report.add(new EmployeeReportDto(employee.getActual().getName(), payroll, changes));
-            }catch (Exception e){
-                System.out.println(e.getMessage() +" for the payroll calculation of "+ employee.getActual().getName());
-            }
+            double payroll = employee.getActual().getContract().getActual().calculate(startPeriodDate, endPeriodDate);
+            ArrayList<String> changes = analyzeChanges(employee);
+            report.add(new EmployeeReportDto(employee.getActual().getName(), payroll, changes));
         }
         return report;
     }
