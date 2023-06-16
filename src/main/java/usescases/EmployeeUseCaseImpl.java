@@ -24,13 +24,13 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     @Override
     public void addEmployee(EmployeeDto employeeDto, ContractDto contractDto) {
         Contract employeeContract;
-        if (contractDto instanceof TotalHourContractDto) {
+        if (contractDto instanceof TotalHourContractDto) { //TODO: Remove instanceof
             employeeContract = new TotalHourContract(contractDto.getStartDate(), contractDto.getFinishDate(), contractDto.getPayPerHour(), ((TotalHourContractDto) contractDto).getTotalHours());
         }
         else { //FullContractDTO
             employeeContract = new FullTimeContract(contractDto.getStartDate(), contractDto.getFinishDate(), contractDto.getPayPerHour());
         }
-        Employee newEmployee = new Employee(employeeDto.name(), employeeDto.phoneNumber(), employeeContract);
+        Employee newEmployee = new Employee(employeeDto.getName(), employeeDto.getPhoneNumber(), employeeContract);
         employeeDatabase.addEmployee(newEmployee);
     }
 
@@ -42,8 +42,23 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     }
 
     @Override
-    public void editEmployee(Employee employee, long id) {
-        employeeDatabase.editEmployeeById(employee, id);
+    public void editEmployeeProfile(UpdateProfileDto updateProfileDto) {
+        Employee oldEmployee = employeeDatabase.getEmployeeById(updateProfileDto.getId());
+        Employee newEmployee = new Employee(updateProfileDto.getId(), updateProfileDto.getFullName(), updateProfileDto.getPhoneNumber(), oldEmployee.getContract());
+        employeeDatabase.editEmployeeProfileById(updateProfileDto.getId(), newEmployee);
+    }
+
+    @Override
+    public void editEmployeeContract(UpdateContractDto updateContractDto) {
+        ContractDto contractDto = updateContractDto.getContractDto();
+        Contract newContract = null;
+        if (contractDto instanceof FullTimeContractDto) {
+            newContract = new FullTimeContract(contractDto.getStartDate(), contractDto.getFinishDate(), contractDto.getPayPerHour());
+        }
+        else if (contractDto instanceof TotalHourContractDto) {
+            newContract = new TotalHourContract(contractDto.getStartDate(), contractDto.getFinishDate(), contractDto.getPayPerHour(), ((TotalHourContractDto) contractDto).getTotalHours());
+        }
+        employeeDatabase.editEmployeeContractById(updateContractDto.getId(), newContract);
     }
 
     @Override
@@ -61,12 +76,13 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     }
 
     @Override
-    public Employee undo(long employeeId) {
+    public EmployeeDto undo(long employeeId) {
         Versionable<Employee> versionableEmployee = employeeDatabase.getEmployeeVersionableById(employeeId);
         if (versionableEmployee != null) {
             try {
                 versionableEmployee.undo();
-            }catch (Exception e){
+            }
+            catch (Exception e){
                 System.out.println(e.getMessage());
             }
         }
@@ -74,11 +90,12 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
             System.out.println("Employee does not exist with id: " + employeeId);
         }
         assert versionableEmployee != null;
-        return versionableEmployee.getActual();
+        Employee newEmployee = versionableEmployee.getActual();
+        return new EmployeeDto(newEmployee.getName(), newEmployee.getPhoneNumber());
     }
 
     @Override
-    public Employee redo(long employeeId) {
+    public EmployeeDto redo(long employeeId) {
         Versionable<Employee> versionableEmployee = employeeDatabase.getEmployeeVersionableById(employeeId);
         if (versionableEmployee != null) {
             try {
@@ -91,12 +108,22 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
             System.out.println("Employee does not exist with id: " + employeeId);
         }
         assert versionableEmployee != null;
-        return versionableEmployee.getActual();
+        Employee newEmployee = versionableEmployee.getActual();
+        return new EmployeeDto(newEmployee.getName(), newEmployee.getPhoneNumber());
     }
 
     @Override
-    public Employee getEmployee(String employeeName) {
-        return employeeDatabase.getEmployeeByName(employeeName);
+    public EmployeeDto getEmployee(String employeeName) {
+        Employee employee = employeeDatabase.getEmployeeByName(employeeName);
+        Contract actualContract = employee.getActualContract();
+        ContractDto contractDto = null;
+        if (actualContract instanceof FullTimeContract) {
+            contractDto = new FullTimeContractDto(actualContract.getStartDate(), actualContract.getFinishDate(), actualContract.getPayPerHour());
+        }
+        else if (actualContract instanceof TotalHourContract) {
+            contractDto = new TotalHourContractDto(actualContract.getStartDate(), actualContract.getFinishDate(), actualContract.getPayPerHour(), ((TotalHourContract) actualContract).getTotalHours());
+        }
+        return new EmployeeDto(employee.getId(), employee.getName(), employee.getPhoneNumber(), contractDto);
     }
 
     @Override

@@ -6,10 +6,7 @@ import java.util.Scanner;
 
 import controller.EmployeeController;
 import controller.EmployeeControllerImpl;
-import model.dto.ContractDto;
-import model.dto.EmployeeDto;
-import model.dto.EmployeeReportDto;
-import model.entities.employee.Employee;
+import model.dto.*;
 import repository.EmployeeDatabaseImpl;
 import usescases.EmployeeUseCaseImpl;
 
@@ -86,7 +83,7 @@ public class App {
     private static void editEmployee() {
         employeeController.printEmployees();
         String employeeName = InputReader.getString("Select an employee to modify: ");
-        Employee employee = employeeController.getEmployee(employeeName);
+        EmployeeDto employee = employeeController.getEmployee(employeeName);
         if (employee == null) {
             System.out.println("That employee does not exist, please select an existing employee");
             editEmployee();
@@ -96,32 +93,35 @@ public class App {
         }
     }
 
-    private static void chooseEdit(Employee employee) {
+    private static void chooseEdit(EmployeeDto employee) { //TODO: Manage undo and redo for contract changes
         printEmployeeDataScreen(employee);
+        printContractData(employee.getContractDto());
         chooseEditScreen();
         Scanner scanner = new Scanner(System.in);
         int decision = scanner.nextInt();
-        Employee updatedEmployee = employee;
+        EmployeeDto updatedEmployee = employee;
         while (decision != 0) {
             switch (decision) {
                 case 1 -> {
-                    String name = InputReader.getString("Enter employee full name: ");
+                    String fullName = InputReader.getString("Enter employee full name: ");
                     String phoneNumber = InputReader.getString("Enter employee phoneNumber: ");
-                    updatedEmployee = new Employee(employee.getID(), name, phoneNumber, employee.getContract()); //Pasarle un UpdateProfileDto (Con id, name y phoneNumber)
-                    employeeController.editEmployee(updatedEmployee, employee.getID());
+                    UpdateProfileDto updateProfileDto = new UpdateProfileDto(employee.getId(), fullName, phoneNumber);
+                    updatedEmployee = new EmployeeDto(employee.getId(), fullName, phoneNumber, employee.getContractDto());
+                    employeeController.editEmployeeProfile(updateProfileDto);
                 }
                 case 2 -> {
-                    ContractDto contract = getContract();
-                    updatedEmployee = new Employee(employee.getID(), employee.getName(), employee.getPhoneNumber(), contract); //Pasarle un UpdateContract (Con id y contract)
-                    employeeController.editEmployee(updatedEmployee, employee.getID());
+                    ContractDto contractDto = getContract();
+                    UpdateContractDto updateContractDto = new UpdateContractDto(employee.getId(), contractDto);
+                    updatedEmployee = new EmployeeDto(employee.getId(), employee.getName(), employee.getPhoneNumber(), contractDto);
+                    employeeController.editEmployeeContract(updateContractDto);
                 }
                 case 3 -> {
-                    Employee undoEmployee = employeeController.undo(employee.getID());
-                    if (undoEmployee != null) updatedEmployee = undoEmployee;
+                    EmployeeDto undoEmployee = employeeController.undo(employee.getId());
+                    if (undoEmployee != null) updatedEmployee = new EmployeeDto(employee.getId(), undoEmployee.getName(), undoEmployee.getPhoneNumber(), employee.getContractDto());
                 }
                 case 4 -> {
-                    Employee redoEmployee = employeeController.redo(employee.getID());
-                    if (redoEmployee != null) updatedEmployee = redoEmployee;
+                    EmployeeDto redoEmployee = employeeController.redo(employee.getId());
+                    if (redoEmployee != null) updatedEmployee = new EmployeeDto(employee.getId(), redoEmployee.getName(), redoEmployee.getPhoneNumber(), employee.getContractDto());
                 }
                 default -> {
                     System.out.println("Please select a valid option");
@@ -160,13 +160,13 @@ public class App {
 
     private static void deleteEmployee() {
         String employeeName = InputReader.getString("Select a employee to modify: ");
-        Employee employee = employeeController.getEmployee(employeeName);
+        EmployeeDto employee = employeeController.getEmployee(employeeName);
         if (employee == null) {
             System.out.println("That employee does not exist, please select an existing employee");
             editEmployee();
         }
         else {
-            employeeController.deleteEmployee(employee.getID());
+            employeeController.deleteEmployee(employee.getId());
         }
     }
 

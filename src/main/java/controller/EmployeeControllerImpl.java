@@ -1,9 +1,6 @@
 package controller;
 
-import model.dto.ContractDto;
-import model.dto.EmployeeDto;
-import model.dto.EmployeeReportDto;
-import model.entities.employee.Employee;
+import model.dto.*;
 import usescases.EmployeeUseCase;
 
 import java.time.LocalDate;
@@ -23,8 +20,13 @@ public class EmployeeControllerImpl implements EmployeeController{
     }
 
     @Override
-    public void editEmployee(Employee employee, long id) {
-        employeeUseCase.editEmployee(employee, id);
+    public void editEmployeeProfile(UpdateProfileDto updateProfileDto) {
+        employeeUseCase.editEmployeeProfile(updateProfileDto);
+    }
+
+    @Override
+    public void editEmployeeContract(UpdateContractDto updateContractDto) {
+        employeeUseCase.editEmployeeContract(updateContractDto);
     }
 
     @Override
@@ -33,17 +35,17 @@ public class EmployeeControllerImpl implements EmployeeController{
     }
 
     @Override
-    public Employee undo(long employeeId) {
+    public EmployeeDto undo(long employeeId) {
         return employeeUseCase.undo(employeeId);
     }
 
     @Override
-    public Employee redo(long employeeId) {
+    public EmployeeDto redo(long employeeId) {
         return employeeUseCase.redo(employeeId);
     }
 
     @Override
-    public Employee getEmployee(String employeeName) {
+    public EmployeeDto getEmployee(String employeeName) {
         return employeeUseCase.getEmployee(employeeName);
     }
 

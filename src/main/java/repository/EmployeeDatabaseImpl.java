@@ -1,5 +1,6 @@
 package repository;
 
+import model.entities.contract.Contract;
 import model.entities.employee.Employee;
 import model.Versionable;
 
@@ -29,17 +30,27 @@ public class EmployeeDatabaseImpl implements EmployeeDatabase{
 
     public void removeEmployee(long id) {
         for (int i = 0; i < database.size(); i++) {
-            if (database.get(i).getActual().getID() == id){
+            if (database.get(i).getActual().getId() == id){
                 database.remove(database.get(i));
                 break;
             }
         }
     }
 
-    public void editEmployeeById(Employee newVersion, long id) {
+    public void editEmployeeProfileById(long id, Employee newVersion) {
         for (Versionable<Employee> employeeVersionable : database) {
-            if (employeeVersionable.getActual().getID() == id) {
+            if (employeeVersionable.getActual().getId() == id) {
                 employeeVersionable.update(newVersion);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void editEmployeeContractById(long id, Contract newContract) {
+        for (Versionable<Employee> employeeVersionable : database) {
+            if (employeeVersionable.getActual().getId() == id) {
+                employeeVersionable.getActual().getContract().update(newContract);
                 break;
             }
         }
@@ -52,7 +63,7 @@ public class EmployeeDatabaseImpl implements EmployeeDatabase{
     public Employee getEmployeeById(long id) {
         Employee e = null;
         for (Versionable<Employee> employeeVersionable : database) {
-            if (employeeVersionable.getActual().getID() == id) {
+            if (employeeVersionable.getActual().getId() == id) {
                 e = employeeVersionable.getActual();
                 break;
             }
@@ -78,7 +89,7 @@ public class EmployeeDatabaseImpl implements EmployeeDatabase{
     @Override
     public Versionable<Employee> getEmployeeVersionableById(long id) {
         for (Versionable<Employee> employeeVersionable : database) {
-            if (employeeVersionable.getActual().getID() == id) {
+            if (employeeVersionable.getActual().getId() == id) {
                 return employeeVersionable;
             }
         }

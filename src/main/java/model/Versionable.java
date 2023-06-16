@@ -21,7 +21,8 @@ public class Versionable<T> {
         if (pointerIsInLatestVersion()){
             history.add(newVersion);
             pointer++;
-        }else{
+        }
+        else {
             rewriteHistoryFrom(newVersion);
         }
     }
@@ -43,7 +44,8 @@ public class Versionable<T> {
     public void undo(){
         if (pointer > 0){
             pointer--;
-        }else{
+        }
+        else {
             throw new RuntimeException("This is your first version");
         }
     }
@@ -51,7 +53,8 @@ public class Versionable<T> {
     public void redo(){
         if (pointer < history.size()-1){
             pointer++;
-        }else{
+        }
+        else {
             throw new RuntimeException("This is your latest version");
         }
     }

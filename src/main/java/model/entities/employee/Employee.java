@@ -5,7 +5,7 @@ import model.entities.contract.Contract;
 
 public class Employee {
 
-    private long ID;
+    private long id;
     String name;
     String phoneNumber;
     Versionable<Contract> contract;
@@ -17,14 +17,14 @@ public class Employee {
     }
 
     public Employee(long id, String name, String phoneNumber, Versionable<Contract> contract) {
-        this.ID = id;
+        this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.contract = contract;
     }
 
-    public long getID() {
-        return ID;
+    public long getId() {
+        return id;
     }
 
     public String getName() {
@@ -40,16 +40,16 @@ public class Employee {
     }
 
     public Employee setName(String name) {
-        return new Employee(this.ID, name, this.phoneNumber, this.contract);
+        return new Employee(this.id, name, this.phoneNumber, this.contract);
     }
 
     public Employee setPhoneNumber(String phoneNumber) {
-        return new Employee(this.ID, this.name, phoneNumber, this.contract);
+        return new Employee(this.id, this.name, phoneNumber, this.contract);
     }
 
     public Employee setContract(Contract contract) {
         this.contract.update(contract);
-        return new Employee(this.ID, name, this.phoneNumber, this.contract);
+        return new Employee(this.id, name, this.phoneNumber, this.contract);
     }
 
     public Versionable<Contract> getContract() {
@@ -57,7 +57,7 @@ public class Employee {
     }
 
     public void setID(long ID) {
-        this.ID = ID;
+        this.id = ID;
     }
 }
 

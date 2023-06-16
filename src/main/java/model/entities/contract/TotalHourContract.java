@@ -21,13 +21,4 @@ public class TotalHourContract extends Contract {
     public double getTotalHours() {
         return totalHours;
     }
-
-    @Override
-    public void print() { //TODO: LLevar a UI
-        System.out.println("Contract: Total hour contract");
-        System.out.println("Starting date: " + getStartDate().toString());
-        System.out.println("Finish date: " + getFinishDate().toString());
-        System.out.println("Pay per hour: " + getPayPerHour());
-        System.out.println("Total hours: " + getTotalHours());
-    }
 }

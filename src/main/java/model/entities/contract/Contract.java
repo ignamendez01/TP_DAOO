@@ -59,6 +59,4 @@ public abstract class Contract {
     }
 
     public abstract double calculatePay(double timeDifference);
-
-    public abstract void print();
 }

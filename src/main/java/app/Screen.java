@@ -1,5 +1,9 @@
 package app;
 
+import model.dto.ContractDto;
+import model.dto.EmployeeDto;
+import model.dto.FullTimeContractDto;
+import model.dto.TotalHourContractDto;
 import model.entities.employee.Employee;
 
 public class Screen {
@@ -25,7 +29,7 @@ public class Screen {
         System.out.println("0. Go back");
     }
 
-    public static void printEmployeeDataScreen(Employee employee) {
+    public static void printEmployeeDataScreen(EmployeeDto employee) {
         System.out.println();
         System.out.println("***************************************");
         System.out.println("Employee data: ");
@@ -52,20 +56,21 @@ public class Screen {
         System.out.println("2. Total hours contract");
     }
 
-//    public static void fullTimeContractScreen() {
-//        System.out.println("Contract: Full time contract");
-//        System.out.println("Starting date: " + getStartDate().toString());
-//        System.out.println("Finish date: " + getFinishDate().toString());
-//        System.out.println("Pay per hour: " + getPayPerHour());
-//        System.out.println("Hours per day: " + getHoursPerDay());
-//
-//    }
-//
-//    public static void totalHourContractScreen() {
-//        System.out.println("Contract: Total hour contract");
-//        System.out.println("Starting date: " + getStartDate().toString());
-//        System.out.println("Finish date: " + getFinishDate().toString());
-//        System.out.println("Pay per hour: " + getPayPerHour());
-//        System.out.println("Total hours: " + getTotalHours());
-//    }
+    public static void printContractData(ContractDto contract) {
+        if (contract instanceof TotalHourContractDto) {
+            System.out.println("Contract: Total hour contract");
+            printContractData(contract);
+            System.out.println("Total hours: " + ((TotalHourContractDto) contract).getTotalHours());
+        }
+        else if (contract instanceof  FullTimeContractDto){
+            System.out.println("Contract: Full time contract");
+            printContractData(contract);
+        }
+    }
+
+    private static void printContractEmployeeData(ContractDto contract) {
+        System.out.println("Starting date: " + contract.getStartDate().toString());
+        System.out.println("Finish date: " + contract.getFinishDate().toString());
+        System.out.println("Pay per hour: " + contract.getPayPerHour());
+    }
 }
