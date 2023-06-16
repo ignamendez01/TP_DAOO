@@ -40,7 +40,11 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
         double payRoll = 0.0;
         List<Versionable<Employee>> employees = employeeDatabase.getEmployees();
         for (Versionable<Employee> employee: employees) {
-            payRoll = payRoll + employee.getActual().getContracts().getActual().calculate(startPeriodDate, endPeriodDate);
+            try{
+                payRoll = payRoll + employee.getActual().getContracts().getActual().calculate(startPeriodDate, endPeriodDate);
+            }catch (Exception e){
+                System.out.println(e.getMessage() +" for the payroll calculation of "+ employee.getActual().getName());
+            }
         }
         return payRoll;
     }
@@ -49,7 +53,11 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     public Employee undo(long employeeId) {
         Versionable<Employee> versionableEmployee = employeeDatabase.getEmployeeVersionableById(employeeId);
         if (versionableEmployee != null) {
-            versionableEmployee.undo();
+            try {
+                versionableEmployee.undo();
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
         else {
             System.out.println("Employee does not exist with id: " + employeeId);
@@ -62,7 +70,11 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     public Employee redo(long employeeId) {
         Versionable<Employee> versionableEmployee = employeeDatabase.getEmployeeVersionableById(employeeId);
         if (versionableEmployee != null) {
-            versionableEmployee.redo();
+            try {
+                versionableEmployee.redo();
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
         else {
             System.out.println("Employee does not exist with id: " + employeeId);
@@ -85,9 +97,13 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     public List<EmployeeReportDto> generatePayrollReport(LocalDate startPeriodDate, LocalDate endPeriodDate) {
         ArrayList<EmployeeReportDto> report = new ArrayList<>();
         for (Versionable<Employee> employee : employeeDatabase.getEmployees()) {
-            double payroll = employee.getActual().getContracts().getActual().calculate(startPeriodDate, endPeriodDate);
-            ArrayList<String> changes = analyzeChanges(employee);
-            report.add(new EmployeeReportDto(employee.getActual().getName(), payroll, changes));
+            try{
+                double payroll = employee.getActual().getContracts().getActual().calculate(startPeriodDate, endPeriodDate);
+                ArrayList<String> changes = analyzeChanges(employee);
+                report.add(new EmployeeReportDto(employee.getActual().getName(), payroll, changes));
+            }catch (Exception e){
+                System.out.println(e.getMessage() +" for the payroll calculation of "+ employee.getActual().getName());
+            }
         }
         return report;
     }

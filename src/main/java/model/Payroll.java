@@ -16,7 +16,11 @@ public class Payroll {
     public double calculate(LocalDate startPeriodDate, LocalDate endPeriodDate) {
         double total = 0.0;
         for (Employee employee: employees) {
-            total = total + employee.getContract().calculate(startPeriodDate, endPeriodDate);
+            try{
+                total = total + employee.getContract().calculate(startPeriodDate, endPeriodDate);
+            }catch (Exception e){
+                System.out.println(e.getMessage() +" for the payroll calculation of "+ employee.getName());
+            }
         }
         return total;
     }
