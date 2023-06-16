@@ -6,11 +6,9 @@ import java.util.Scanner;
 
 import controller.EmployeeController;
 import controller.EmployeeControllerImpl;
-import model.Versionable;
+import model.dto.ContractDto;
+import model.dto.EmployeeDto;
 import model.dto.EmployeeReportDto;
-import model.entities.contract.Contract;
-import model.entities.contract.FullTimeContract;
-import model.entities.contract.TotalHourContract;
 import model.entities.employee.Employee;
 import repository.EmployeeDatabaseImpl;
 import usescases.EmployeeUseCaseImpl;
@@ -27,15 +25,9 @@ public class App {
         int decision = scanner.nextInt();
         while (decision != 0) {
             switch (decision) {
-                case 1 -> {
-                    calculatePayroll();
-                }
-                case 2 -> {
-                    generatePayrollReport();
-                }
-                case 3 -> {
-                    manageUsers();
-                }
+                case 1 -> calculatePayroll();
+                case 2 -> generatePayrollReport();
+                case 3 -> manageUsers();
             }
             printInitialScreen();
             decision = scanner.nextInt();
@@ -45,8 +37,8 @@ public class App {
     private static void calculatePayroll() {
         System.out.println();
         System.out.println("***************************************");
-        LocalDate startPeriodDate = InputReader.getDate("Insert first day of period to calculate payroll (dd-MM-yyyy): ");
-        LocalDate endPeriodDate = InputReader.getDate("Insert last day of period to calculate payroll (dd-MM-yyyy): ");
+        LocalDate startPeriodDate = InputReader.getDate("Insert the date from when to calculate payroll (dd-MM-yyyy): ");
+        LocalDate endPeriodDate = InputReader.getDate("Insert the date until when to calculate payroll (dd-MM-yyyy): ");
         double payroll = employeeController.calculatePayroll(startPeriodDate, endPeriodDate);
         System.out.println("You have to pay: " + payroll + " " + "from: " + startPeriodDate.toString() + " to " + endPeriodDate.toString());
     }
@@ -54,8 +46,8 @@ public class App {
     private static void generatePayrollReport() {
         System.out.println();
         System.out.println("***************************************");
-        LocalDate startPeriodDate = InputReader.getDate("Insert first day of period to generate payroll report (dd-MM-yyyy): ");
-        LocalDate lastPeriodDate = InputReader.getDate("Insert last day of period to generate payroll report (dd-MM-yyyy): ");
+        LocalDate startPeriodDate = InputReader.getDate("Insert the date from when to generate payroll report (dd-MM-yyyy): ");
+        LocalDate lastPeriodDate = InputReader.getDate("Insert the date until when to generate payroll report (dd-MM-yyyy): ");
         ArrayList<EmployeeReportDto> reports = (ArrayList<EmployeeReportDto>) employeeController.generatePayrollReport(startPeriodDate, lastPeriodDate);
         for (EmployeeReportDto report: reports) {
             System.out.println("Report Employee: " + report.getName());
@@ -73,18 +65,10 @@ public class App {
         int decision = scanner.nextInt();
         while (decision != 0) {
             switch (decision) {
-                case 1 -> {
-                    addEmployee();
-                }
-                case 2 -> {
-                    editEmployee();
-                }
-                case 3 -> {
-                    deleteEmployee();
-                }
-                case 4 -> {
-                    viewAllEmployees();
-                }
+                case 1 -> addEmployee();
+                case 2 -> editEmployee();
+                case 3 -> deleteEmployee();
+                case 4 -> viewAllEmployees();
             }
             printManageUsersScreen();
             decision = scanner.nextInt();
@@ -94,14 +78,14 @@ public class App {
     private static void addEmployee() {
         String name = InputReader.getString("Enter employee full name: ");
         String phoneNumber = InputReader.getString("Enter employee phoneNumber: ");
-        Contract contract = getContract();
-        Employee employee = new Employee(name, phoneNumber, contract);
-        employeeController.addEmployee(employee);
+        ContractDto contractDto = getContract();
+        EmployeeDto employeeDto = new EmployeeDto(name, phoneNumber);
+        employeeController.addEmployee(employeeDto, contractDto);
     }
 
     private static void editEmployee() {
         employeeController.printEmployees();
-        String employeeName = InputReader.getString("Select a employee to modify: ");
+        String employeeName = InputReader.getString("Select an employee to modify: ");
         Employee employee = employeeController.getEmployee(employeeName);
         if (employee == null) {
             System.out.println("That employee does not exist, please select an existing employee");
@@ -123,12 +107,12 @@ public class App {
                 case 1 -> {
                     String name = InputReader.getString("Enter employee full name: ");
                     String phoneNumber = InputReader.getString("Enter employee phoneNumber: ");
-                    updatedEmployee = new Employee(employee.getID(), name, phoneNumber, employee.getContract());
+                    updatedEmployee = new Employee(employee.getID(), name, phoneNumber, employee.getContract()); //Pasarle un UpdateProfileDto (Con id, name y phoneNumber)
                     employeeController.editEmployee(updatedEmployee, employee.getID());
                 }
                 case 2 -> {
-                    Contract contract = getContract();
-                    updatedEmployee = new Employee(employee.getID(), employee.getName(), employee.getPhoneNumber(), contract);
+                    ContractDto contract = getContract();
+                    updatedEmployee = new Employee(employee.getID(), employee.getName(), employee.getPhoneNumber(), contract); //Pasarle un UpdateContract (Con id y contract)
                     employeeController.editEmployee(updatedEmployee, employee.getID());
                 }
                 case 3 -> {
@@ -150,8 +134,8 @@ public class App {
         }
     }
 
-    private static Contract getContract() {
-        Contract contract = null;
+    private static ContractDto getContract() {
+        ContractDto contract = null;
         chooseContractScreen();
         Scanner scanner = new Scanner(System.in);
         int decision = scanner.nextInt();
@@ -160,14 +144,14 @@ public class App {
                 LocalDate start = InputReader.getDate("Contract start date (dd-MM-yyyy): ");
                 LocalDate finish = InputReader.getDate("Contract finish date (dd-MM-yyyy): ");
                 int payPerHour = InputReader.getInt("Pay per hour: ");
-                contract = new FullTimeContract(start, finish, payPerHour);
+                contract = new FullTimeContractDto(start, finish, payPerHour);
             }
             case 2 -> {
                 LocalDate start = InputReader.getDate("Contract start date (dd-MM-yyyy): ");
                 LocalDate finish = InputReader.getDate("Contract finish date (dd-MM-yyyy): ");
                 int payPerHour = InputReader.getInt("Pay per hour: ");
                 int totalHours = InputReader.getInt("Total hours: ");
-                contract = new TotalHourContract(start, finish, payPerHour, totalHours);
+                contract = new TotalHourContractDto(start, finish, payPerHour, totalHours);
             }
         }
         return contract;

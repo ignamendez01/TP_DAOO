@@ -13,8 +13,7 @@ public class TotalHourContract extends Contract {
     }
 
     @Override
-    public double calculatePeriod(LocalDate startDate, LocalDate endPeriodDate) {
-        double timeDifference = ChronoUnit.DAYS.between(startDate, endPeriodDate);
+    public double calculatePay(double timeDifference) {
         double totalDaysContract = ChronoUnit.DAYS.between(this.getStartDate(), this.getFinishDate());
         return this.getPayPerHour() * ((float) timeDifference / (float) totalDaysContract) * totalHours;
     }
@@ -24,7 +23,7 @@ public class TotalHourContract extends Contract {
     }
 
     @Override
-    public void print() {
+    public void print() { //TODO: LLevar a UI
         System.out.println("Contract: Total hour contract");
         System.out.println("Starting date: " + getStartDate().toString());
         System.out.println("Finish date: " + getFinishDate().toString());

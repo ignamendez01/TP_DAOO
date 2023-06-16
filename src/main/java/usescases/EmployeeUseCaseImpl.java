@@ -1,6 +1,9 @@
 package usescases;
 
-import model.dto.EmployeeReportDto;
+import model.dto.*;
+import model.entities.contract.Contract;
+import model.entities.contract.FullTimeContract;
+import model.entities.contract.TotalHourContract;
 import model.entities.employee.Employee;
 import model.Versionable;
 import repository.EmployeeDatabase;
@@ -19,8 +22,16 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     }
 
     @Override
-    public void addEmployee(Employee employee) {
-        employeeDatabase.addEmployee(employee);
+    public void addEmployee(EmployeeDto employeeDto, ContractDto contractDto) {
+        Contract employeeContract;
+        if (contractDto instanceof TotalHourContractDto) {
+            employeeContract = new TotalHourContract(contractDto.getStartDate(), contractDto.getFinishDate(), contractDto.getPayPerHour(), ((TotalHourContractDto) contractDto).getTotalHours());
+        }
+        else { //FullContractDTO
+            employeeContract = new FullTimeContract(contractDto.getStartDate(), contractDto.getFinishDate(), contractDto.getPayPerHour());
+        }
+        Employee newEmployee = new Employee(employeeDto.name(), employeeDto.phoneNumber(), employeeContract);
+        employeeDatabase.addEmployee(newEmployee);
     }
 
     @Override
@@ -41,7 +52,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
         List<Versionable<Employee>> employees = employeeDatabase.getEmployees();
         for (Versionable<Employee> employee: employees) {
             try{
-                payRoll = payRoll + employee.getActual().getContracts().getActual().calculate(startPeriodDate, endPeriodDate);
+                payRoll = payRoll + employee.getActual().getContract().getActual().calculate(startPeriodDate, endPeriodDate);
             }catch (Exception e){
                 System.out.println(e.getMessage() +" for the payroll calculation of "+ employee.getActual().getName());
             }
@@ -98,7 +109,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
         ArrayList<EmployeeReportDto> report = new ArrayList<>();
         for (Versionable<Employee> employee : employeeDatabase.getEmployees()) {
             try{
-                double payroll = employee.getActual().getContracts().getActual().calculate(startPeriodDate, endPeriodDate);
+                double payroll = employee.getActual().getContract().getActual().calculate(startPeriodDate, endPeriodDate);
                 ArrayList<String> changes = analyzeChanges(employee);
                 report.add(new EmployeeReportDto(employee.getActual().getName(), payroll, changes));
             }catch (Exception e){
@@ -121,7 +132,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
             if (!lastVersion.getPhoneNumber().equals(employee.getPhoneNumber())) {
                 changes.add("PhoneNumber: " + employee.getPhoneNumber() + " ---> " + lastVersion.getPhoneNumber());
             }
-            if (!lastVersion.getContract().equals(employee.getContract())) {
+            if (!lastVersion.getActualContract().equals(employee.getActualContract())) {
                 changes.add("Contract Changes.");
             }
             lastVersion = employee;

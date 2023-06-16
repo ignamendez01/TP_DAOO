@@ -4,33 +4,23 @@ import model.Versionable;
 import model.entities.contract.Contract;
 
 public class Employee {
+
     private long ID;
     String name;
     String phoneNumber;
-    Versionable<Contract> contracts;
-
-    public Employee(Contract contract) {
-        this.contracts = new Versionable<>(contract);
-    }
+    Versionable<Contract> contract;
 
     public Employee(String name, String phoneNumber, Contract contract) {
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.contracts = new Versionable<>(contract);
+        this.contract = new Versionable<>(contract);
     }
 
-    public Employee(long id, String name, String phoneNumber, Contract contract) {
+    public Employee(long id, String name, String phoneNumber, Versionable<Contract> contract) {
         this.ID = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.contracts = new Versionable<>(contract);
-    }
-
-    public Employee(long id, String name, String phoneNumber, Versionable<Contract> contracts) {
-        this.ID = id;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.contracts = contracts;
+        this.contract = contract;
     }
 
     public long getID() {
@@ -45,27 +35,25 @@ public class Employee {
         return phoneNumber;
     }
 
-    public Contract getContract() {
-        return contracts.getActual();
+    public Contract getActualContract() {
+        return contract.getActual();
     }
 
     public Employee setName(String name) {
-        return new Employee(this.ID, name, this.phoneNumber, this.contracts);
+        return new Employee(this.ID, name, this.phoneNumber, this.contract);
     }
 
-    public Employee setContact(String contact) {
-        return new Employee(this.ID, this.name, contact, this.contracts);
+    public Employee setPhoneNumber(String phoneNumber) {
+        return new Employee(this.ID, this.name, phoneNumber, this.contract);
     }
 
     public Employee setContract(Contract contract) {
-        contracts.update(contract);
-        return new Employee(this.ID, name, this.phoneNumber, this.contracts);
+        this.contract.update(contract);
+        return new Employee(this.ID, name, this.phoneNumber, this.contract);
     }
 
-
-
-    public Versionable<Contract> getContracts() {
-        return contracts;
+    public Versionable<Contract> getContract() {
+        return contract;
     }
 
     public void setID(long ID) {

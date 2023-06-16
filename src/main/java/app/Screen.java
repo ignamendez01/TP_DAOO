@@ -31,7 +31,7 @@ public class Screen {
         System.out.println("Employee data: ");
         System.out.println("Name: " + employee.getName());
         System.out.println("Phone number: " + employee.getPhoneNumber());
-        employee.getContract().print();
+        //employee.getContract().print();
     }
 
     public static void chooseEditScreen() {
@@ -51,4 +51,21 @@ public class Screen {
         System.out.println("1. Full time contract");
         System.out.println("2. Total hours contract");
     }
+
+//    public static void fullTimeContractScreen() {
+//        System.out.println("Contract: Full time contract");
+//        System.out.println("Starting date: " + getStartDate().toString());
+//        System.out.println("Finish date: " + getFinishDate().toString());
+//        System.out.println("Pay per hour: " + getPayPerHour());
+//        System.out.println("Hours per day: " + getHoursPerDay());
+//
+//    }
+//
+//    public static void totalHourContractScreen() {
+//        System.out.println("Contract: Total hour contract");
+//        System.out.println("Starting date: " + getStartDate().toString());
+//        System.out.println("Finish date: " + getFinishDate().toString());
+//        System.out.println("Pay per hour: " + getPayPerHour());
+//        System.out.println("Total hours: " + getTotalHours());
+//    }
 }

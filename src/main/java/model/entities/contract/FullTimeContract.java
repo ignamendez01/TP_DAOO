@@ -1,7 +1,6 @@
 package model.entities.contract;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 public class FullTimeContract extends Contract {
 
@@ -12,14 +11,12 @@ public class FullTimeContract extends Contract {
     }
 
     @Override
-    public double calculatePeriod(LocalDate startDate, LocalDate endPeriodDate) {
-        double timeDifference;
-        timeDifference = ChronoUnit.DAYS.between(startDate, endPeriodDate);
+    public double calculatePay(double timeDifference) {
         return this.getPayPerHour() * this.getHoursPerDay() * timeDifference;
     }
 
     @Override
-    public void print() {
+    public void print() {  //TODO: LLevar a UI
         System.out.println("Contract: Full time contract");
         System.out.println("Starting date: " + getStartDate().toString());
         System.out.println("Finish date: " + getFinishDate().toString());

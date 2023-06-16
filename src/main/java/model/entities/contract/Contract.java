@@ -5,9 +5,9 @@ import java.time.temporal.ChronoUnit;
 
 public abstract class Contract {
 
-    private LocalDate startDate;
-    private LocalDate finishDate;
-    private double payPerHour;
+    private final LocalDate startDate;
+    private final LocalDate finishDate;
+    private final double payPerHour;
 
     public Contract(LocalDate startDate, LocalDate finishDate, double payPerHour) {
         this.startDate = startDate;
@@ -17,7 +17,6 @@ public abstract class Contract {
         }else{
             throw new RuntimeException("Invalid Date");
         }
-
     }
 
     public LocalDate getStartDate() {
@@ -32,31 +31,34 @@ public abstract class Contract {
         return payPerHour;
     }
 
-    public double calculate(LocalDate startPeriodDate, LocalDate endPeriodDate){
-        if (endPeriodDate.isAfter(startPeriodDate)) {
-            if (endPeriodDate.isAfter(startDate)  && startPeriodDate.isBefore(finishDate)) {
-                if (startPeriodDate.isBefore(startDate)){
-                    if (endPeriodDate.isAfter(finishDate)) {
+    public double calculate(LocalDate fromDate, LocalDate toDate){
+        if (toDate.isAfter(fromDate)) {
+            if (toDate.isAfter(startDate)  && fromDate.isBefore(finishDate)) {
+                if (fromDate.isBefore(startDate)){
+                    if (toDate.isAfter(finishDate)) {
                         return calculatePeriod(startDate, finishDate);
-                    } else {
-                        return calculatePeriod(startDate, endPeriodDate);
                     }
-                }else {
-                    if (endPeriodDate.isAfter(finishDate)) {
-                        return calculatePeriod(startPeriodDate, finishDate);
-                    } else {
-                        return calculatePeriod(startPeriodDate, endPeriodDate);
-                    }
+                    else return calculatePeriod(startDate, toDate);
+
                 }
-            } else {
-                throw new RuntimeException("Invalid period");
+                else {
+                    if (toDate.isAfter(finishDate)) {
+                        return calculatePeriod(fromDate, finishDate);
+                    }
+                    else return calculatePeriod(fromDate, toDate);
+                }
             }
-        }else{
-            throw new RuntimeException("Invalid date");
+            else return 0.0;
         }
+        else throw new RuntimeException("Invalid date");
     }
 
-    public abstract double calculatePeriod(LocalDate startDate, LocalDate endPeriodDate);
+    private double calculatePeriod(LocalDate startPeriod, LocalDate endPeriod){
+        double timeDifference = ChronoUnit.DAYS.between(startPeriod, endPeriod);
+        return calculatePay(timeDifference);
+    }
+
+    public abstract double calculatePay(double timeDifference);
 
     public abstract void print();
 }

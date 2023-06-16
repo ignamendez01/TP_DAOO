@@ -1,5 +1,7 @@
 package usescases;
 
+import model.dto.ContractDto;
+import model.dto.EmployeeDto;
 import model.dto.EmployeeReportDto;
 import model.entities.employee.Employee;
 
@@ -8,7 +10,7 @@ import java.util.List;
 
 public interface EmployeeUseCase {
 
-    void addEmployee(Employee employee);
+    void addEmployee(EmployeeDto employeeDto, ContractDto contractDto);
     void printEmployees();
     void editEmployee(Employee employee, long id);
     double calculatePayroll(LocalDate startPeriodDate, LocalDate endPeriodDate);

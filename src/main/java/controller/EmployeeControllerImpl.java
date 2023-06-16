@@ -1,5 +1,7 @@
 package controller;
 
+import model.dto.ContractDto;
+import model.dto.EmployeeDto;
 import model.dto.EmployeeReportDto;
 import model.entities.employee.Employee;
 import usescases.EmployeeUseCase;
@@ -16,8 +18,8 @@ public class EmployeeControllerImpl implements EmployeeController{
     }
 
     @Override
-    public void addEmployee(Employee employee) {
-        employeeUseCase.addEmployee(employee);
+    public void addEmployee(EmployeeDto employeeDto, ContractDto contractDto) {
+        employeeUseCase.addEmployee(employeeDto, contractDto);
     }
 
     @Override

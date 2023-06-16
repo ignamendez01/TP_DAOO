@@ -19,7 +19,7 @@ public class VersionableTest {
                 LocalDate.of(2023, Calendar.JULY,14), 14));
         Versionable<Employee> versionable = new Versionable<>(e1);
         Employee e2 = e1.setName("Marco Antonio");
-        Employee e3 = e2.setContact("987654321");
+        Employee e3 = e2.setPhoneNumber("987654321");
         versionable.update(e2);
         versionable.update(e3);
         versionable.undo();
@@ -33,7 +33,7 @@ public class VersionableTest {
                 LocalDate.of(2023, Calendar.JUNE,14), 14));
         Versionable<Employee> versionable = new Versionable<>(e1);
         Employee e2 = e1.setName("Marco Antonio");
-        Employee e3 = e2.setContact("987654321");
+        Employee e3 = e2.setPhoneNumber("987654321");
         versionable.update(e2);
         versionable.update(e3);
         versionable.undo();
@@ -49,8 +49,8 @@ public class VersionableTest {
                 LocalDate.of(2023, Calendar.JUNE,14), 14));
         Versionable<Employee> versionable = new Versionable<>(e1);
         Employee e2 = e1.setName("Marco Antonio");
-        Employee e3 = e2.setContact("987654321");
-        Employee e4 = e3.setContact("010101010");
+        Employee e3 = e2.setPhoneNumber("987654321");
+        Employee e4 = e3.setPhoneNumber("010101010");
         Employee e5 = e4.setName("Esteban Cortez");
         versionable.update(e2);
         versionable.update(e3);
@@ -70,11 +70,11 @@ public class VersionableTest {
         Employee e1 = new Employee("Marcos", "123456789", new FullTimeContract(LocalDate.of(2023, Calendar.JUNE,9),
                 LocalDate.of(2023, Calendar.JUNE,14), 14));
 
-        assertEquals(336,e1.getContract().calculate(LocalDate.of(2023, Calendar.JUNE, 1), LocalDate.of(2023, Calendar.JUNE,12)));
+        assertEquals(336,e1.getActualContract().calculate(LocalDate.of(2023, Calendar.JUNE, 1), LocalDate.of(2023, Calendar.JUNE,12)));
 
-        e1.getContracts().update(new TotalHourContract(e1.getContract().getStartDate(),
-                e1.getContract().getFinishDate(),e1.getContract().getPayPerHour(),5));
+        e1.getContract().update(new TotalHourContract(e1.getActualContract().getStartDate(),
+                e1.getActualContract().getFinishDate(),e1.getActualContract().getPayPerHour(),5));
 
-        assertEquals(42,(int) e1.getContract().calculate(LocalDate.of(2023, Calendar.JUNE, 1), LocalDate.of(2023, Calendar.JUNE,12)));
+        assertEquals(42,(int) e1.getActualContract().calculate(LocalDate.of(2023, Calendar.JUNE, 1), LocalDate.of(2023, Calendar.JUNE,12)));
     }
 }
