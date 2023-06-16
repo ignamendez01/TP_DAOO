@@ -1,6 +1,5 @@
 package model.entities.employee;
 
-import model.Versionable;
 import model.entities.contract.Contract;
 
 public class Employee {
@@ -8,15 +7,15 @@ public class Employee {
     private long id;
     String name;
     String phoneNumber;
-    Versionable<Contract> contract;
+    Contract contract;
 
     public Employee(String name, String phoneNumber, Contract contract) {
         this.name = name;
         this.phoneNumber = phoneNumber;
-        this.contract = new Versionable<>(contract);
+        this.contract = contract;
     }
 
-    public Employee(long id, String name, String phoneNumber, Versionable<Contract> contract) {
+    public Employee(long id, String name, String phoneNumber, Contract contract) {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -35,8 +34,8 @@ public class Employee {
         return phoneNumber;
     }
 
-    public Contract getActualContract() {
-        return contract.getActual();
+    public Contract getContract() {
+        return contract;
     }
 
     public Employee setName(String name) {
@@ -48,12 +47,7 @@ public class Employee {
     }
 
     public Employee setContract(Contract contract) {
-        this.contract.update(contract);
-        return new Employee(this.id, name, this.phoneNumber, this.contract);
-    }
-
-    public Versionable<Contract> getContract() {
-        return contract;
+        return new Employee(this.id, name, this.phoneNumber, contract);
     }
 
     public void setID(long ID) {

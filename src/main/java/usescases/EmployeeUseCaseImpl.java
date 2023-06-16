@@ -45,11 +45,12 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     public void editEmployeeProfile(UpdateProfileDto updateProfileDto) {
         Employee oldEmployee = employeeDatabase.getEmployeeById(updateProfileDto.getId());
         Employee newEmployee = new Employee(updateProfileDto.getId(), updateProfileDto.getFullName(), updateProfileDto.getPhoneNumber(), oldEmployee.getContract());
-        employeeDatabase.editEmployeeProfileById(updateProfileDto.getId(), newEmployee);
+        employeeDatabase.editEmployee(updateProfileDto.getId(), newEmployee);
     }
 
     @Override
     public void editEmployeeContract(UpdateContractDto updateContractDto) {
+        Employee oldEmployee = employeeDatabase.getEmployeeById(updateContractDto.getId());
         ContractDto contractDto = updateContractDto.getContractDto();
         Contract newContract = null;
         if (contractDto instanceof FullTimeContractDto) {
@@ -58,7 +59,8 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
         else if (contractDto instanceof TotalHourContractDto) {
             newContract = new TotalHourContract(contractDto.getStartDate(), contractDto.getFinishDate(), contractDto.getPayPerHour(), ((TotalHourContractDto) contractDto).getTotalHours());
         }
-        employeeDatabase.editEmployeeContractById(updateContractDto.getId(), newContract);
+        Employee newEmployee = new Employee(updateContractDto.getId(), oldEmployee.getName(), oldEmployee.getPhoneNumber(), newContract);
+        employeeDatabase.editEmployee(updateContractDto.getId(), newEmployee);
     }
 
     @Override
@@ -66,7 +68,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
         double payRoll = 0.0;
         List<Versionable<Employee>> employees = employeeDatabase.getEmployees();
         for (Versionable<Employee> employee: employees) {
-            payRoll = payRoll + employee.getActual().getContract().getActual().calculate(startPeriodDate, endPeriodDate);
+            payRoll = payRoll + employee.getActual().getContract().calculate(startPeriodDate, endPeriodDate);
         }
         return payRoll;
     }
@@ -90,7 +92,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     @Override
     public EmployeeDto getEmployee(String employeeName) {
         Employee employee = employeeDatabase.getEmployeeByName(employeeName);
-        Contract actualContract = employee.getActualContract();
+        Contract actualContract = employee.getContract();
         ContractDto contractDto = null;
         if (actualContract instanceof FullTimeContract) {
             contractDto = new FullTimeContractDto(actualContract.getStartDate(), actualContract.getFinishDate(), actualContract.getPayPerHour());
@@ -110,7 +112,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     public List<EmployeeReportDto> generatePayrollReport(LocalDate startPeriodDate, LocalDate endPeriodDate) {
         ArrayList<EmployeeReportDto> report = new ArrayList<>();
         for (Versionable<Employee> employee : employeeDatabase.getEmployees()) {
-            double payroll = employee.getActual().getContract().getActual().calculate(startPeriodDate, endPeriodDate);
+            double payroll = employee.getActual().getContract().calculate(startPeriodDate, endPeriodDate);
             ArrayList<String> changes = analyzeChanges(employee);
             report.add(new EmployeeReportDto(employee.getActual().getName(), payroll, changes));
         }
@@ -130,7 +132,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
             if (!lastVersion.getPhoneNumber().equals(employee.getPhoneNumber())) {
                 changes.add("PhoneNumber: " + employee.getPhoneNumber() + " ---> " + lastVersion.getPhoneNumber());
             }
-            if (!lastVersion.getActualContract().equals(employee.getActualContract())) {
+            if (!lastVersion.getContract().equals(employee.getContract())) {
                 changes.add("Contract Changes.");
             }
             lastVersion = employee;

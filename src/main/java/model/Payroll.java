@@ -17,7 +17,7 @@ public class Payroll {
         double total = 0.0;
         for (Employee employee: employees) {
             try{
-                total = total + employee.getActualContract().calculate(startPeriodDate, endPeriodDate);
+                total = total + employee.getContract().calculate(startPeriodDate, endPeriodDate);
             }catch (Exception e){
                 System.out.println(e.getMessage() +" for the payroll calculation of "+ employee.getName());
             }

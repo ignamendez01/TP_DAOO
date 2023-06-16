@@ -11,10 +11,11 @@ public abstract class Contract {
 
     public Contract(LocalDate startDate, LocalDate finishDate, double payPerHour) {
         this.startDate = startDate;
-        if (finishDate.isAfter(startDate)){
+        if (finishDate.isAfter(startDate)) {
             this.finishDate = finishDate;
             this.payPerHour = payPerHour;
-        }else{
+        }
+        else {
             throw new RuntimeException("Invalid Date");
         }
     }

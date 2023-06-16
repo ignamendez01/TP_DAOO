@@ -1,6 +1,5 @@
 package repository;
 
-import model.entities.contract.Contract;
 import model.entities.employee.Employee;
 import model.Versionable;
 
@@ -37,20 +36,10 @@ public class EmployeeDatabaseImpl implements EmployeeDatabase{
         }
     }
 
-    public void editEmployeeProfileById(long id, Employee newVersion) {
+    public void editEmployee(long id, Employee newVersion) {
         for (Versionable<Employee> employeeVersionable : database) {
             if (employeeVersionable.getActual().getId() == id) {
                 employeeVersionable.update(newVersion);
-                break;
-            }
-        }
-    }
-
-    @Override
-    public void editEmployeeContractById(long id, Contract newContract) {
-        for (Versionable<Employee> employeeVersionable : database) {
-            if (employeeVersionable.getActual().getId() == id) {
-                employeeVersionable.getActual().getContract().update(newContract);
                 break;
             }
         }

@@ -48,7 +48,7 @@ public class DatabaseTest{
 
         Employee e4 = e2.setPhoneNumber("111111111");
 
-        database.editEmployeeProfileById(e4.getId(), e4);
+        database.editEmployee(e4.getId(), e4);
 
         assertEquals("111111111",database.getEmployeeById(2).getPhoneNumber());
     }
