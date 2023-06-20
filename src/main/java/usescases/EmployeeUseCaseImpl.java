@@ -2,8 +2,7 @@ package usescases;
 
 import model.dto.*;
 import model.entities.contract.Contract;
-import model.entities.contract.FullTimeContract;
-import model.entities.contract.TotalHourContract;
+import model.entities.contractFactory.ContractFactory;
 import model.entities.employee.Employee;
 import model.Versionable;
 import repository.EmployeeDatabase;
@@ -23,13 +22,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
 
     @Override
     public void addEmployee(EmployeeDto employeeDto, ContractDto contractDto) {
-        Contract employeeContract;
-        if (contractDto instanceof TotalHourContractDto) { //TODO: Remove instanceof
-            employeeContract = new TotalHourContract(contractDto.getStartDate(), contractDto.getFinishDate(), contractDto.getPayPerHour(), ((TotalHourContractDto) contractDto).getTotalHours());
-        }
-        else { //FullContractDTO
-            employeeContract = new FullTimeContract(contractDto.getStartDate(), contractDto.getFinishDate(), contractDto.getPayPerHour());
-        }
+        Contract employeeContract = ContractFactory.createContract(contractDto);
         Employee newEmployee = new Employee(employeeDto.getName(), employeeDto.getPhoneNumber(), employeeContract);
         employeeDatabase.addEmployee(newEmployee);
     }
@@ -54,13 +47,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     public void editEmployeeContract(UpdateContractDto updateContractDto) {
         Employee oldEmployee = employeeDatabase.getEmployeeById(updateContractDto.getId());
         ContractDto contractDto = updateContractDto.getContractDto();
-        Contract newContract = null;
-        if (contractDto instanceof FullTimeContractDto) {
-            newContract = new FullTimeContract(contractDto.getStartDate(), contractDto.getFinishDate(), contractDto.getPayPerHour());
-        }
-        else if (contractDto instanceof TotalHourContractDto) {
-            newContract = new TotalHourContract(contractDto.getStartDate(), contractDto.getFinishDate(), contractDto.getPayPerHour(), ((TotalHourContractDto) contractDto).getTotalHours());
-        }
+        Contract newContract = ContractFactory.createContract(contractDto);
         Employee newEmployee = new Employee(updateContractDto.getId(), oldEmployee.getName(), oldEmployee.getPhoneNumber(), newContract);
         employeeDatabase.editEmployee(updateContractDto.getId(), newEmployee);
     }
@@ -92,16 +79,10 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     }
 
     @Override
-    public EmployeeDto getEmployee(String employeeName) { //TODO: revisar instance of, ver que patrones usar
+    public EmployeeDto getEmployee(String employeeName) {
         Employee employee = employeeDatabase.getEmployeeByName(employeeName);
         Contract actualContract = employee.getContract();
-        ContractDto contractDto = null;
-        if (actualContract instanceof FullTimeContract) {
-            contractDto = new FullTimeContractDto(actualContract.getStartDate(), actualContract.getFinishDate(), actualContract.getPayPerHour());
-        }
-        else if (actualContract instanceof TotalHourContract) {
-            contractDto = new TotalHourContractDto(actualContract.getStartDate(), actualContract.getFinishDate(), actualContract.getPayPerHour(), ((TotalHourContract) actualContract).getTotalHours());
-        }
+        ContractDto contractDto = ContractFactory.createContractDto(actualContract);
         return new EmployeeDto(employee.getId(), employee.getName(), employee.getPhoneNumber(), contractDto);
     }
 
