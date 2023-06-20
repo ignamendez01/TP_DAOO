@@ -28,7 +28,7 @@ public class InputReader {
         }
     }
 
-    public static LocalDate getDate(String message) { //TODO: cuando pongo mal la fecha try catch
+    public static LocalDate getDate(String message) {
         System.out.print(message);
         final String result = scanner.nextLine().trim();
         if (result.isEmpty()) {
@@ -36,8 +36,14 @@ public class InputReader {
             return getDate(message);
         }
         else {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            return LocalDate.parse(result, formatter);
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                return LocalDate.parse(result, formatter);
+            }
+            catch (Exception e) {
+                System.out.println("Wrong date format, please insert the date again");
+                return getDate(message);
+            }
         }
     }
 
