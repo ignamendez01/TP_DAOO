@@ -6,6 +6,8 @@ import model.dto.FullTimeContractDto;
 import model.dto.TotalHourContractDto;
 import model.entities.employee.Employee;
 
+import java.util.List;
+
 public class Screen {
 
 
@@ -35,7 +37,6 @@ public class Screen {
         System.out.println("Employee data: ");
         System.out.println("Name: " + employee.getName());
         System.out.println("Phone number: " + employee.getPhoneNumber());
-        //employee.getContract().print();
     }
 
     public static void chooseEditScreen() {
@@ -56,15 +57,16 @@ public class Screen {
         System.out.println("2. Total hours contract");
     }
 
-    public static void printContractData(ContractDto contract) {
+    public static void printContractData(ContractDto contract) { //TODO: Revisar instanceOf
         if (contract instanceof TotalHourContractDto) {
             System.out.println("Contract: Total hour contract");
-            printContractData(contract);
+            printContractEmployeeData(contract);
             System.out.println("Total hours: " + ((TotalHourContractDto) contract).getTotalHours());
         }
         else if (contract instanceof  FullTimeContractDto){
             System.out.println("Contract: Full time contract");
-            printContractData(contract);
+            printContractEmployeeData(contract);
+            System.out.println("Hours per day: " + ((FullTimeContractDto) contract).getHoursPerPay());
         }
     }
 
@@ -72,5 +74,11 @@ public class Screen {
         System.out.println("Starting date: " + contract.getStartDate().toString());
         System.out.println("Finish date: " + contract.getFinishDate().toString());
         System.out.println("Pay per hour: " + contract.getPayPerHour());
+    }
+
+    public static void printAllEmployees(List<EmployeeDto> employeeDtos) {
+        for (int i = 0; i < employeeDtos.size(); i++) {
+            System.out.println((i+1)+") "+employeeDtos.get(i).getName());
+        }
     }
 }

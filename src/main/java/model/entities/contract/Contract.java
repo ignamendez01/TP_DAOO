@@ -9,7 +9,7 @@ public abstract class Contract {
     private final LocalDate finishDate;
     private final double payPerHour;
 
-    public Contract(LocalDate startDate, LocalDate finishDate, double payPerHour) {
+    public Contract(LocalDate startDate, LocalDate finishDate, double payPerHour) { //TODO: Revisar Template method
         this.startDate = startDate;
         if (finishDate.isAfter(startDate)) {
             this.finishDate = finishDate;

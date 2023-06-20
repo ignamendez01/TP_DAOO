@@ -55,8 +55,8 @@ public class EmployeeControllerImpl implements EmployeeController{
     }
 
     @Override
-    public void printEmployees() {
-        employeeUseCase.printEmployees();
+    public List<EmployeeDto> printEmployees() {
+        return employeeUseCase.printEmployees();
     }
 
     @Override

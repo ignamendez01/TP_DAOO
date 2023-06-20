@@ -35,10 +35,12 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     }
 
     @Override
-    public void printEmployees() {
-        for (int i = 0; i < employeeDatabase.getEmployees().size(); i++) {
-            System.out.println((i+1)+") "+employeeDatabase.getEmployees().get(i).getActual().getName());
+    public List<EmployeeDto> printEmployees() {
+        List<EmployeeDto> employeeDtos = new ArrayList<>();
+        for (Versionable<Employee> employee: employeeDatabase.getEmployees()) {
+            employeeDtos.add(new EmployeeDto(employee.getActual().getName(), employee.getActual().getPhoneNumber()));
         }
+        return employeeDtos;
     }
 
     @Override
@@ -90,7 +92,7 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
     }
 
     @Override
-    public EmployeeDto getEmployee(String employeeName) {
+    public EmployeeDto getEmployee(String employeeName) { //TODO: revisar instance of, ver que patrones usar
         Employee employee = employeeDatabase.getEmployeeByName(employeeName);
         Contract actualContract = employee.getContract();
         ContractDto contractDto = null;

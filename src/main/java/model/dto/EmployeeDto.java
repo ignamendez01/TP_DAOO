@@ -17,7 +17,7 @@ public class EmployeeDto {
         this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
-        //this.contractDto = contractDto;
+        this.contractDto = contractDto;
     }
 
     public long getId() {

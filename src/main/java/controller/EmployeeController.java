@@ -15,7 +15,7 @@ public interface EmployeeController {
     EmployeeDto redo(long employeeId);
     EmployeeDto getEmployee(String employeeName);
     void deleteEmployee(long employeeId);
-    void printEmployees();
+    List<EmployeeDto> printEmployees();
     List<EmployeeReportDto> generatePayrollReport(LocalDate startPeriodDate, LocalDate endPeriodDate);
 
 }

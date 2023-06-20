@@ -8,7 +8,7 @@ import java.util.List;
 public interface EmployeeUseCase {
 
     void addEmployee(EmployeeDto employeeDto, ContractDto contractDto);
-    void printEmployees();
+    List<EmployeeDto> printEmployees();
     void editEmployeeProfile(UpdateProfileDto updateProfileDto);
     void editEmployeeContract(UpdateContractDto updateContractDto);
     double calculatePayroll(LocalDate startPeriodDate, LocalDate endPeriodDate);

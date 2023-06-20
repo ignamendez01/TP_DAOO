@@ -28,7 +28,7 @@ public class InputReader {
         }
     }
 
-    public static LocalDate getDate(String message) {
+    public static LocalDate getDate(String message) { //TODO: cuando pongo mal la fecha try catch
         System.out.print(message);
         final String result = scanner.nextLine().trim();
         if (result.isEmpty()) {

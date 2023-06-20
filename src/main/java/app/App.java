@@ -2,6 +2,7 @@ package app;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import controller.EmployeeController;
@@ -69,7 +70,7 @@ public class App {
         }
     }
 
-    private static void manageUsers() {
+    private static void manageUsers() { //TODO: fijarse que los datos no sean negativos
         printManageUsersScreen();
         Scanner scanner = new Scanner(System.in);
         int decision = scanner.nextInt();
@@ -94,7 +95,7 @@ public class App {
     }
 
     private static void editEmployee() {
-        employeeController.printEmployees();
+        viewAllEmployees();
         String employeeName = InputReader.getString("Select an employee to modify: ");
         EmployeeDto employee = employeeController.getEmployee(employeeName);
         if (employee == null) {
@@ -106,7 +107,7 @@ public class App {
         }
     }
 
-    private static void chooseEdit(EmployeeDto employee) { //TODO: Manage undo and redo for contract changes
+    private static void chooseEdit(EmployeeDto employee) {
         printEmployeeDataScreen(employee);
         printContractData(employee.getContractDto());
         chooseEditScreen();
@@ -118,14 +119,14 @@ public class App {
                 case 1 -> {
                     String fullName = InputReader.getString("Enter employee full name: ");
                     String phoneNumber = InputReader.getString("Enter employee phoneNumber: ");
-                    UpdateProfileDto updateProfileDto = new UpdateProfileDto(employee.getId(), fullName, phoneNumber);
                     updatedEmployee = new EmployeeDto(employee.getId(), fullName, phoneNumber, employee.getContractDto());
+                    UpdateProfileDto updateProfileDto = new UpdateProfileDto(employee.getId(), fullName, phoneNumber);
                     employeeController.editEmployeeProfile(updateProfileDto);
                 }
                 case 2 -> {
                     ContractDto contractDto = getContract();
-                    UpdateContractDto updateContractDto = new UpdateContractDto(employee.getId(), contractDto);
                     updatedEmployee = new EmployeeDto(employee.getId(), employee.getName(), employee.getPhoneNumber(), contractDto);
+                    UpdateContractDto updateContractDto = new UpdateContractDto(employee.getId(), contractDto);
                     employeeController.editEmployeeContract(updateContractDto);
                 }
                 case 3 -> {
@@ -196,7 +197,8 @@ public class App {
     }
 
     private static void viewAllEmployees() {
-        employeeController.printEmployees();
+        List<EmployeeDto> employeeDtos = employeeController.printEmployees();
+        printAllEmployees(employeeDtos);
     }
 
 }
