@@ -4,7 +4,6 @@ import model.dto.ContractDto;
 import model.dto.EmployeeDto;
 import model.dto.FullTimeContractDto;
 import model.dto.TotalHourContractDto;
-import model.entities.employee.Employee;
 
 import java.util.List;
 

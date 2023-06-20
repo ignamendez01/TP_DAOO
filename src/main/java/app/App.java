@@ -91,7 +91,14 @@ public class App {
         String phoneNumber = InputReader.getString("Enter employee phoneNumber: ");
         ContractDto contractDto = getContract();
         EmployeeDto employeeDto = new EmployeeDto(name, phoneNumber);
-        employeeController.addEmployee(employeeDto, contractDto);
+        try {
+            employeeController.addEmployee(employeeDto, contractDto);
+        }
+        catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            addEmployee();
+            System.out.println();
+        }
     }
 
     private static void editEmployee() {
@@ -127,7 +134,15 @@ public class App {
                     ContractDto contractDto = getContract();
                     updatedEmployee = new EmployeeDto(employee.getId(), employee.getName(), employee.getPhoneNumber(), contractDto);
                     UpdateContractDto updateContractDto = new UpdateContractDto(employee.getId(), contractDto);
-                    employeeController.editEmployeeContract(updateContractDto);
+                    try {
+                        employeeController.editEmployeeContract(updateContractDto);
+                    }
+                    catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                        chooseEdit(employee);
+                        System.out.println();
+                    }
+
                 }
                 case 3 -> {
                     try {
@@ -156,6 +171,7 @@ public class App {
                 }
             }
             printEmployeeDataScreen(updatedEmployee);
+            printContractData(employee.getContractDto());
             chooseEditScreen();
             decision = scanner.nextInt();
         }

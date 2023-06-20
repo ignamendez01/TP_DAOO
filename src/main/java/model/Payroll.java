@@ -18,8 +18,9 @@ public class Payroll {
         for (Employee employee: employees) {
             try{
                 total = total + employee.getContract().calculate(startPeriodDate, endPeriodDate);
-            }catch (Exception e){
-                System.out.println(e.getMessage() +" for the payroll calculation of "+ employee.getName());
+            }
+            catch (Exception e){
+                throw new RuntimeException(e.getMessage() +" for the payroll calculation of "+ employee.getName());
             }
         }
         return total;

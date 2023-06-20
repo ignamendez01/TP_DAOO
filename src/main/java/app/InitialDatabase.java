@@ -1,6 +1,5 @@
 package app;
 
-import model.entities.contract.Contract;
 import model.entities.employee.Employee;
 import model.entities.contract.FullTimeContract;
 import model.Versionable;

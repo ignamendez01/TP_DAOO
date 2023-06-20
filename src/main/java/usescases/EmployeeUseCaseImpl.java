@@ -38,18 +38,18 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
 
     @Override
     public void editEmployeeProfile(UpdateProfileDto updateProfileDto) {
-        Employee oldEmployee = employeeDatabase.getEmployeeById(updateProfileDto.getId());
-        Employee newEmployee = new Employee(updateProfileDto.getId(), updateProfileDto.getFullName(), updateProfileDto.getPhoneNumber(), oldEmployee.getContract());
-        employeeDatabase.editEmployee(updateProfileDto.getId(), newEmployee);
+        Employee oldEmployee = employeeDatabase.getEmployeeById(updateProfileDto.id());
+        Employee newEmployee = new Employee(updateProfileDto.id(), updateProfileDto.fullName(), updateProfileDto.phoneNumber(), oldEmployee.getContract());
+        employeeDatabase.editEmployee(updateProfileDto.id(), newEmployee);
     }
 
     @Override
     public void editEmployeeContract(UpdateContractDto updateContractDto) {
-        Employee oldEmployee = employeeDatabase.getEmployeeById(updateContractDto.getId());
-        ContractDto contractDto = updateContractDto.getContractDto();
+        Employee oldEmployee = employeeDatabase.getEmployeeById(updateContractDto.id());
+        ContractDto contractDto = updateContractDto.contractDto();
         Contract newContract = ContractFactory.createContract(contractDto);
-        Employee newEmployee = new Employee(updateContractDto.getId(), oldEmployee.getName(), oldEmployee.getPhoneNumber(), newContract);
-        employeeDatabase.editEmployee(updateContractDto.getId(), newEmployee);
+        Employee newEmployee = new Employee(updateContractDto.id(), oldEmployee.getName(), oldEmployee.getPhoneNumber(), newContract);
+        employeeDatabase.editEmployee(updateContractDto.id(), newEmployee);
     }
 
     @Override

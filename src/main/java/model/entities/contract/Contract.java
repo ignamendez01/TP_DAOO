@@ -16,7 +16,7 @@ public abstract class Contract {
             this.payPerHour = payPerHour;
         }
         else {
-            throw new RuntimeException("Invalid Date");
+            throw new RuntimeException("Invalid Date, contract finish date must be after contract start date");
         }
     }
 
