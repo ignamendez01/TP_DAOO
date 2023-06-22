@@ -7,7 +7,7 @@ import model.entities.contract.Contract;
 import model.entities.contract.FullTimeContract;
 import model.entities.contract.TotalHourContract;
 
-public class ContractFactory {
+public class  ContractFactory {
 
     public static Contract createContract(ContractDto contractDto) {
         if (contractDto instanceof FullTimeContractDto) {

@@ -1,14 +1,16 @@
 package model.dto;
 
+import model.entities.inspector.Change;
+
 import java.util.List;
 
 public class EmployeeReportDto {
 
     String name;
     double payroll;
-    List<String> changes;
+    List<Change> changes;
 
-    public EmployeeReportDto(String name, double payroll, List<String> changes) {
+    public EmployeeReportDto(String name, double payroll, List<Change> changes) {
         this.name = name;
         this.payroll = payroll;
         this.changes = changes;
@@ -22,7 +24,7 @@ public class EmployeeReportDto {
         return payroll;
     }
 
-    public List<String> getChanges() {
+    public List<Change> getChanges() {
         return changes;
     }
 }

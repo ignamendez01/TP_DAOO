@@ -8,6 +8,7 @@ import java.util.Scanner;
 import controller.EmployeeController;
 import controller.EmployeeControllerImpl;
 import model.dto.*;
+import model.entities.inspector.Change;
 import repository.EmployeeDatabaseImpl;
 import usescases.EmployeeUseCaseImpl;
 
@@ -59,8 +60,8 @@ public class App {
                 System.out.println("Report Employee: " + report.getName());
                 System.out.println("- Payroll: " + report.getPayroll());
                 System.out.println("- Changes:");
-                for (String str: report.getChanges()) {
-                    System.out.println("   - " + str);
+                for (Change change: report.getChanges()) {
+                    System.out.println("   - " + change.getField() + ": " + change.getPrevState() + " ---> " + change.getNextState());
                 }
             }
         }

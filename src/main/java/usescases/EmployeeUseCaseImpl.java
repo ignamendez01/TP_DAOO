@@ -5,10 +5,14 @@ import model.entities.contract.Contract;
 import model.entities.contractFactory.ContractFactory;
 import model.entities.employee.Employee;
 import model.Versionable;
+import model.entities.inspector.Change;
+import model.entities.inspector.EmployeeInspector;
+import model.entities.inspector.Inspector;
 import repository.EmployeeDatabase;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -96,32 +100,25 @@ public class EmployeeUseCaseImpl implements EmployeeUseCase{
         ArrayList<EmployeeReportDto> report = new ArrayList<>();
         for (Versionable<Employee> employee : employeeDatabase.getEmployees()) {
             double payroll = employee.getActual().getContract().calculate(startPeriodDate, endPeriodDate);
-            ArrayList<String> changes = analyzeChanges(employee);
+            ArrayList<Change> changes = analyzeChanges(employee);
             report.add(new EmployeeReportDto(employee.getActual().getName(), payroll, changes));
         }
         return report;
     }
 
-    private ArrayList<String> analyzeChanges(Versionable<Employee> versionableEmployee) {
-        ArrayList<String> changes = new ArrayList<>();
+    private ArrayList<Change> analyzeChanges(Versionable<Employee> versionableEmployee) {
+        ArrayList<Change> changes = new ArrayList<>();
         Employee lastVersion = versionableEmployee.getActual();
-        ArrayList<Employee> history = (ArrayList<Employee>) ((ArrayList<Employee>) versionableEmployee.getHistory()).clone();
+        ArrayList<Employee> history = new ArrayList<>(versionableEmployee.getHistory());
         Collections.reverse(history);
+
+        EmployeeInspector employeeInspector = new EmployeeInspector();
         for (Employee employee: history) {
             if (lastVersion.equals(employee)) continue;
-            if (!lastVersion.getName().equals(employee.getName())) {
-                changes.add("Name: " + employee.getName() + " ---> " + lastVersion.getName());
+            for (Inspector inspector: employeeInspector.getInspectors()) {
+                if (inspector.check(lastVersion, employee))
+                    changes.add(inspector.apply(lastVersion, employee));
             }
-            if (!lastVersion.getPhoneNumber().equals(employee.getPhoneNumber())) {
-                changes.add("PhoneNumber: " + employee.getPhoneNumber() + " ---> " + lastVersion.getPhoneNumber());
-            }
-            if (!lastVersion.getContract().equals(employee.getContract())) {
-                changes.add("Contract Changes.");
-            }
-            lastVersion = employee;
-        }
-        if (changes.size() == 0) {
-            changes.add("No Changes.");
         }
         return changes;
     }
